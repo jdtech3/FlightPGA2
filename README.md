@@ -10,3 +10,8 @@ where we tried to do the project in Verilog only.
   * `software/`: C/C++ code for running on Nios II core
   * `bsp/`: board support package for Nios II core
   * `raspberrypi/`: Python code for running on Raspberry Pi to provide interface to USB joystick
+
+### Team
+
+* [Joe Dai](https://github.com/jdtech3/)
+* [Swarnava Ghosh](https://github.com/swarnavaghosh04/)
