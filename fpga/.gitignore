@@ -1,0 +1,19 @@
+
+# Quartus working files
+*.qws
+**/db/
+**/incremental_db/
+**/greybox_tmp/
+
+# Quartus output files
+*.sof
+*.rpt
+*.smsg
+*.summary
+*.jdi
+*.pin
+*.sld
+
+# Platform Designer working/output files
+**/.qsys_edit
+Computer_System/synthesis

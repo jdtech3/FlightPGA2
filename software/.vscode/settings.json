@@ -1,0 +1,11 @@
+{
+    "explorer.excludeGitIgnore": true,
+    "C_Cpp.default.systemIncludePath": [
+        "/home/jdtech/intelFPGA_lite/18.1/nios2eds/bin/gnu/nios2-elf/include/c++/5.3.0",
+        "/home/jdtech/intelFPGA_lite/18.1/nios2eds/bin/gnu/nios2-elf/include/c++/5.3.0/backward",
+        "/home/jdtech/intelFPGA_lite/18.1/nios2eds/bin/gnu/nios2-elf/include/c++/5.3.0/nios2-elf",
+        "/home/jdtech/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/lib/gcc/nios2-elf/5.3.0/include",
+        "/home/jdtech/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/lib/gcc/nios2-elf/5.3.0/include-fixed",
+        "/home/jdtech/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/nios2-elf/include"
+    ]
+}

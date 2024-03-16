@@ -1,0 +1,6 @@
+# Binaries
+*.elf
+*.map
+*.objdump
+*.o
+obj/
