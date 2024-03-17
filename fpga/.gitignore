@@ -13,6 +13,7 @@
 *.jdi
 *.pin
 *.sld
+*.done
 
 # Platform Designer working/output files
 **/.qsys_edit

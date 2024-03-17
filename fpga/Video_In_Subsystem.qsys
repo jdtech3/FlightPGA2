@@ -6,7 +6,7 @@
    version="1.0"
    description=""
    tags=""
-   categories="" />
+   categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
    element Sys_Clk
@@ -215,7 +215,7 @@
   <parameter name="AUTO_SYS_CLK_CLOCK_DOMAIN" value="1" />
   <parameter name="AUTO_SYS_CLK_CLOCK_RATE" value="0" />
   <parameter name="AUTO_SYS_CLK_RESET_DOMAIN" value="1" />
-  <parameter name="AUTO_UNIQUE_ID">Video_In_Subsystem_Video_In_Edge_Detection_Subsystem</parameter>
+  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_Video_In_Edge_Detection_Subsystem</parameter>
  </module>
  <module
    name="Video_In_RGB_Resampler"
