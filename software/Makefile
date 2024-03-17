@@ -31,7 +31,7 @@ MAKEABLE_LIBRARY_ROOT_DIRS :=
 # Generic flags passed to the compiler for different types of input files.
 ALT_CFLAGS :=
 ALT_CXXFLAGS :=
-ALT_CPPFLAGS := "-std=c++11"
+ALT_CPPFLAGS := "-std=c++14"
 ALT_ASFLAGS :=
 ALT_LDFLAGS :=
 
@@ -142,13 +142,12 @@ ACDS_VERSION := 18.1
 ELF := FlightGPA2.elf
 
 # Paths to C, C++, and assembly source files.
-C_SRCS += src/display/display.c
-C_SRCS += src/display/primitives.c
-C_SRCS += src/utils/stack.c
-C_SRCS += src/utils/utils.c
-CXX_SRCS := src/main.cpp
+C_SRCS :=
+CXX_SRCS += src/main.cpp
+CXX_SRCS += $(wildcard src/audio/*.cpp)
+CXX_SRCS += $(wildcard src/display/*.cpp)
+CXX_SRCS += $(wildcard src/utils/*.cpp)
 ASM_SRCS :=
-
 
 # Path to root of object file tree.
 OBJ_ROOT_DIR := obj
@@ -165,7 +164,7 @@ CREATE_LINKER_MAP := 1
 # Common arguments for ALT_CFLAGSs
 APP_CFLAGS_DEFINED_SYMBOLS :=
 APP_CFLAGS_UNDEFINED_SYMBOLS :=
-APP_CFLAGS_OPTIMIZATION := -O0
+APP_CFLAGS_OPTIMIZATION := -O1
 APP_CFLAGS_DEBUG_LEVEL := -g
 APP_CFLAGS_WARNINGS := -Wall
 APP_CFLAGS_USER_FLAGS :=

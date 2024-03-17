@@ -1,6 +1,10 @@
 # Binaries
 *.elf
+*.srec
 *.map
 *.objdump
 *.o
 obj/
+
+# Other outputs
+*.out
