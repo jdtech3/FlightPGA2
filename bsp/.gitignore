@@ -6,3 +6,6 @@
 *.o
 *.a
 obj/
+
+# Generated
+summary.html

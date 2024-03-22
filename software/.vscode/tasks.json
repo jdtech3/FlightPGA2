@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "make"
+        },
+        {
+            "label": "Upload to Nios2",
+            "type": "shell",
+            "command": "nios2-download",
+            "args": ["--stop", "FlightGPA2.elf"]
+        },
+        {
+            "label": "Nios2 Console",
+            "type": "shell",
+            "command": "nios2-terminal"
+        },
+        {
+            "label": "Build and upload to Nios2",
+            "dependsOn": [
+                "Build",
+                "Upload to Nios2",
+                "Nios2 Console"
+            ],
+            "dependsOrder": "sequence"
+        }
+    ]
+}

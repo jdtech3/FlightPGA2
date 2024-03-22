@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>18.1</BspVersion>
-        <BspGeneratedTimeStamp>Mar 19, 2024 9:57:41 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1710899861160</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 22, 2024 12:32:01 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1711081921369</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/jdtech/FlightGPA2/bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../fpga/Computer_System.sopcinfo</SopcDesignFile>

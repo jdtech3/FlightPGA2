@@ -38,7 +38,7 @@ ALT_LDFLAGS :=
 
 #------------------------------------------------------------------------------
 #                         The adjust-path macro
-# 
+#
 # If COMSPEC/ComSpec is defined, Make is launched from Windows through
 # Cygwin.  The adjust-path macro converts absolute windows paths into
 # unix style paths (Example: c:/dir -> /c/dir). This will ensture

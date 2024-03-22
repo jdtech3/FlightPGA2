@@ -50,7 +50,9 @@
         "cstddef": "cpp",
         "ctime": "cpp",
         "ratio": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "queue": "cpp",
+        "random": "cpp"
     },
     "C_Cpp.default.includePath": [
         "/home/jdtech/FlightGPA2/software/lib/glm",
