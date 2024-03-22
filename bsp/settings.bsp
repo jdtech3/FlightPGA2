@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>18.1</BspVersion>
-        <BspGeneratedTimeStamp>Mar 17, 2024 12:03:27 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1710691407794</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 19, 2024 9:57:41 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1710899861160</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/jdtech/FlightGPA2/bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../fpga/Computer_System.sopcinfo</SopcDesignFile>
@@ -770,7 +770,7 @@
                 <SettingName>hal.enable_gprof</SettingName>
                 <Identifier>ALT_PROVIDE_GMON</Identifier>
                 <Type>Boolean</Type>
-                <Value>1</Value>
+                <Value>0</Value>
                 <DefaultValue>0</DefaultValue>
                 <DestinationFile>public_mk_define</DestinationFile>
                 <Description>Causes code to be compiled with gprof profiling enabled and the application ELF to be linked with the GPROF library. If true, adds -DALT_PROVIDE_GMON to ALT_CPPFLAGS and -pg to ALT_CFLAGS in public.mk.</Description>

@@ -4,4 +4,5 @@
 *.map
 *.objdump
 *.o
+*.a
 obj/

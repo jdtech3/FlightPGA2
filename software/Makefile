@@ -147,6 +147,8 @@ CXX_SRCS += src/main.cpp
 CXX_SRCS += $(wildcard src/audio/*.cpp)
 CXX_SRCS += $(wildcard src/display/*.cpp)
 CXX_SRCS += $(wildcard src/utils/*.cpp)
+CXX_SRCS += $(wildcard src/graphics/*.cpp)
+CXX_SRCS += lib/glm/glm/detail/glm.cpp
 ASM_SRCS :=
 
 # Path to root of object file tree.
@@ -182,7 +184,8 @@ SYS_LIB :=
 BSP_ROOT_DIR := ../bsp/
 
 # List of application specific include directories, library directories and library names
-APP_INCLUDE_DIRS := include
+APP_INCLUDE_DIRS += include
+APP_INCLUDE_DIRS += lib/glm
 APP_LIBRARY_DIRS :=
 APP_LIBRARY_NAMES :=
 
