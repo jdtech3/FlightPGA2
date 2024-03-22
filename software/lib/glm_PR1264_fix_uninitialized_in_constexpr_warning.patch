@@ -1,0 +1,421 @@
+From 3918ed8ffd0f4c9c44828b052bacf67dbed0df03 Mon Sep 17 00:00:00 2001
+From: Jeff Burnett <jeff.burnett@garmin.com>
+Date: Fri, 23 Feb 2024 10:33:51 -0600
+Subject: [PATCH] Fix uninitialized in constexpr warning
+
+Matrix multiplication functions that were recently marked as 'constexpr'
+in commit '1cc8e80e3ba140239196d9a4597a2ea8139a4aa5' can throw warnings
+about an "uninitialized variable 'Result' in constexpr function".
+
+Change-Id: I95396da9ac8a6e0dd1b6ae4e782f75446cfa70a3
+---
+ glm/detail/type_mat2x3.inl | 35 +++++++---------------
+ glm/detail/type_mat2x4.inl | 53 +++++++++++----------------------
+ glm/detail/type_mat3x2.inl | 25 ++++------------
+ glm/detail/type_mat3x3.inl | 41 +++++++------------------
+ glm/detail/type_mat3x4.inl | 61 +++++++++++---------------------------
+ glm/detail/type_mat4x2.inl | 29 ++++--------------
+ glm/detail/type_mat4x3.inl | 47 +++++++----------------------
+ glm/detail/type_mat4x4.inl | 21 ++++---------
+ 8 files changed, 79 insertions(+), 233 deletions(-)
+
+diff --git a/glm/detail/type_mat2x3.inl b/glm/detail/type_mat2x3.inl
+index 345ac8ac6..c29666c3b 100644
+--- a/glm/detail/type_mat2x3.inl
++++ b/glm/detail/type_mat2x3.inl
+@@ -433,31 +433,16 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<3, 3, T, Q> operator*(mat<2, 3, T, Q> const& m1, mat<3, 2, T, Q> const& m2)
+ 	{
+-		T SrcA00 = m1[0][0];
+-		T SrcA01 = m1[0][1];
+-		T SrcA02 = m1[0][2];
+-		T SrcA10 = m1[1][0];
+-		T SrcA11 = m1[1][1];
+-		T SrcA12 = m1[1][2];
+-
+-		T SrcB00 = m2[0][0];
+-		T SrcB01 = m2[0][1];
+-		T SrcB10 = m2[1][0];
+-		T SrcB11 = m2[1][1];
+-		T SrcB20 = m2[2][0];
+-		T SrcB21 = m2[2][1];
+-
+-		mat<3, 3, T, Q> Result;
+-		Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01;
+-		Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01;
+-		Result[0][2] = SrcA02 * SrcB00 + SrcA12 * SrcB01;
+-		Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11;
+-		Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11;
+-		Result[1][2] = SrcA02 * SrcB10 + SrcA12 * SrcB11;
+-		Result[2][0] = SrcA00 * SrcB20 + SrcA10 * SrcB21;
+-		Result[2][1] = SrcA01 * SrcB20 + SrcA11 * SrcB21;
+-		Result[2][2] = SrcA02 * SrcB20 + SrcA12 * SrcB21;
+-		return Result;
++		return mat<3, 3, T, Q>(
++			m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1],
++			m1[0][1] * m2[0][0] + m1[1][1] * m2[0][1],
++			m1[0][2] * m2[0][0] + m1[1][2] * m2[0][1],
++			m1[0][0] * m2[1][0] + m1[1][0] * m2[1][1],
++			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1],
++			m1[0][2] * m2[1][0] + m1[1][2] * m2[1][1],
++			m1[0][0] * m2[2][0] + m1[1][0] * m2[2][1],
++			m1[0][1] * m2[2][0] + m1[1][1] * m2[2][1],
++			m1[0][2] * m2[2][0] + m1[1][2] * m2[2][1]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
+diff --git a/glm/detail/type_mat2x4.inl b/glm/detail/type_mat2x4.inl
+index 1c182c9dd..bde07ced0 100644
+--- a/glm/detail/type_mat2x4.inl
++++ b/glm/detail/type_mat2x4.inl
+@@ -418,42 +418,23 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q> operator*(mat<2, 4, T, Q> const& m1, mat<4, 2, T, Q> const& m2)
+ 	{
+-		T SrcA00 = m1[0][0];
+-		T SrcA01 = m1[0][1];
+-		T SrcA02 = m1[0][2];
+-		T SrcA03 = m1[0][3];
+-		T SrcA10 = m1[1][0];
+-		T SrcA11 = m1[1][1];
+-		T SrcA12 = m1[1][2];
+-		T SrcA13 = m1[1][3];
+-
+-		T SrcB00 = m2[0][0];
+-		T SrcB01 = m2[0][1];
+-		T SrcB10 = m2[1][0];
+-		T SrcB11 = m2[1][1];
+-		T SrcB20 = m2[2][0];
+-		T SrcB21 = m2[2][1];
+-		T SrcB30 = m2[3][0];
+-		T SrcB31 = m2[3][1];
+-
+-		mat<4, 4, T, Q> Result;
+-		Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01;
+-		Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01;
+-		Result[0][2] = SrcA02 * SrcB00 + SrcA12 * SrcB01;
+-		Result[0][3] = SrcA03 * SrcB00 + SrcA13 * SrcB01;
+-		Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11;
+-		Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11;
+-		Result[1][2] = SrcA02 * SrcB10 + SrcA12 * SrcB11;
+-		Result[1][3] = SrcA03 * SrcB10 + SrcA13 * SrcB11;
+-		Result[2][0] = SrcA00 * SrcB20 + SrcA10 * SrcB21;
+-		Result[2][1] = SrcA01 * SrcB20 + SrcA11 * SrcB21;
+-		Result[2][2] = SrcA02 * SrcB20 + SrcA12 * SrcB21;
+-		Result[2][3] = SrcA03 * SrcB20 + SrcA13 * SrcB21;
+-		Result[3][0] = SrcA00 * SrcB30 + SrcA10 * SrcB31;
+-		Result[3][1] = SrcA01 * SrcB30 + SrcA11 * SrcB31;
+-		Result[3][2] = SrcA02 * SrcB30 + SrcA12 * SrcB31;
+-		Result[3][3] = SrcA03 * SrcB30 + SrcA13 * SrcB31;
+-		return Result;
++		return mat<4, 4, T, Q>(
++			m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1],
++			m1[0][1] * m2[0][0] + m1[1][1] * m2[0][1],
++			m1[0][2] * m2[0][0] + m1[1][2] * m2[0][1],
++			m1[0][3] * m2[0][0] + m1[1][3] * m2[0][1],
++			m1[0][0] * m2[1][0] + m1[1][0] * m2[1][1],
++			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1],
++			m1[0][2] * m2[1][0] + m1[1][2] * m2[1][1],
++			m1[0][3] * m2[1][0] + m1[1][3] * m2[1][1],
++			m1[0][0] * m2[2][0] + m1[1][0] * m2[2][1],
++			m1[0][1] * m2[2][0] + m1[1][1] * m2[2][1],
++			m1[0][2] * m2[2][0] + m1[1][2] * m2[2][1],
++			m1[0][3] * m2[2][0] + m1[1][3] * m2[2][1],
++			m1[0][0] * m2[3][0] + m1[1][0] * m2[3][1],
++			m1[0][1] * m2[3][0] + m1[1][1] * m2[3][1],
++			m1[0][2] * m2[3][0] + m1[1][2] * m2[3][1],
++			m1[0][3] * m2[3][0] + m1[1][3] * m2[3][1]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
+diff --git a/glm/detail/type_mat3x2.inl b/glm/detail/type_mat3x2.inl
+index cd9f46ccc..dc7654d1d 100644
+--- a/glm/detail/type_mat3x2.inl
++++ b/glm/detail/type_mat3x2.inl
+@@ -450,26 +450,11 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<2, 2, T, Q> operator*(mat<3, 2, T, Q> const& m1, mat<2, 3, T, Q> const& m2)
+ 	{
+-		const T SrcA00 = m1[0][0];
+-		const T SrcA01 = m1[0][1];
+-		const T SrcA10 = m1[1][0];
+-		const T SrcA11 = m1[1][1];
+-		const T SrcA20 = m1[2][0];
+-		const T SrcA21 = m1[2][1];
+-
+-		const T SrcB00 = m2[0][0];
+-		const T SrcB01 = m2[0][1];
+-		const T SrcB02 = m2[0][2];
+-		const T SrcB10 = m2[1][0];
+-		const T SrcB11 = m2[1][1];
+-		const T SrcB12 = m2[1][2];
+-
+-		mat<2, 2, T, Q> Result;
+-		Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01 + SrcA20 * SrcB02;
+-		Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01 + SrcA21 * SrcB02;
+-		Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11 + SrcA20 * SrcB12;
+-		Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11 + SrcA21 * SrcB12;
+-		return Result;
++		return mat<2, 2, T, Q>(
++			m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2],
++			m1[0][1] * m2[0][0] + m1[1][1] * m2[0][1] + m1[2][1] * m2[0][2],
++			m1[0][0] * m2[1][0] + m1[1][0] * m2[1][1] + m1[2][0] * m2[1][2],
++			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1] + m1[2][1] * m2[1][2]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
+diff --git a/glm/detail/type_mat3x3.inl b/glm/detail/type_mat3x3.inl
+index a9b633ae2..e89e39bba 100644
+--- a/glm/detail/type_mat3x3.inl
++++ b/glm/detail/type_mat3x3.inl
+@@ -485,37 +485,16 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<3, 3, T, Q> operator*(mat<3, 3, T, Q> const& m1, mat<3, 3, T, Q> const& m2)
+ 	{
+-		T const SrcA00 = m1[0][0];
+-		T const SrcA01 = m1[0][1];
+-		T const SrcA02 = m1[0][2];
+-		T const SrcA10 = m1[1][0];
+-		T const SrcA11 = m1[1][1];
+-		T const SrcA12 = m1[1][2];
+-		T const SrcA20 = m1[2][0];
+-		T const SrcA21 = m1[2][1];
+-		T const SrcA22 = m1[2][2];
+-
+-		T const SrcB00 = m2[0][0];
+-		T const SrcB01 = m2[0][1];
+-		T const SrcB02 = m2[0][2];
+-		T const SrcB10 = m2[1][0];
+-		T const SrcB11 = m2[1][1];
+-		T const SrcB12 = m2[1][2];
+-		T const SrcB20 = m2[2][0];
+-		T const SrcB21 = m2[2][1];
+-		T const SrcB22 = m2[2][2];
+-
+-		mat<3, 3, T, Q> Result;
+-		Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01 + SrcA20 * SrcB02;
+-		Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01 + SrcA21 * SrcB02;
+-		Result[0][2] = SrcA02 * SrcB00 + SrcA12 * SrcB01 + SrcA22 * SrcB02;
+-		Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11 + SrcA20 * SrcB12;
+-		Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11 + SrcA21 * SrcB12;
+-		Result[1][2] = SrcA02 * SrcB10 + SrcA12 * SrcB11 + SrcA22 * SrcB12;
+-		Result[2][0] = SrcA00 * SrcB20 + SrcA10 * SrcB21 + SrcA20 * SrcB22;
+-		Result[2][1] = SrcA01 * SrcB20 + SrcA11 * SrcB21 + SrcA21 * SrcB22;
+-		Result[2][2] = SrcA02 * SrcB20 + SrcA12 * SrcB21 + SrcA22 * SrcB22;
+-		return Result;
++		return mat<3, 3, T, Q>(
++			m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2],
++			m1[0][1] * m2[0][0] + m1[1][1] * m2[0][1] + m1[2][1] * m2[0][2],
++			m1[0][2] * m2[0][0] + m1[1][2] * m2[0][1] + m1[2][2] * m2[0][2],
++			m1[0][0] * m2[1][0] + m1[1][0] * m2[1][1] + m1[2][0] * m2[1][2],
++			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1] + m1[2][1] * m2[1][2],
++			m1[0][2] * m2[1][0] + m1[1][2] * m2[1][1] + m1[2][2] * m2[1][2],
++			m1[0][0] * m2[2][0] + m1[1][0] * m2[2][1] + m1[2][0] * m2[2][2],
++			m1[0][1] * m2[2][0] + m1[1][1] * m2[2][1] + m1[2][1] * m2[2][2],
++			m1[0][2] * m2[2][0] + m1[1][2] * m2[2][1] + m1[2][2] * m2[2][2]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
+diff --git a/glm/detail/type_mat3x4.inl b/glm/detail/type_mat3x4.inl
+index 209e9d90b..a4afac0da 100644
+--- a/glm/detail/type_mat3x4.inl
++++ b/glm/detail/type_mat3x4.inl
+@@ -466,50 +466,23 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q> operator*(mat<3, 4, T, Q> const& m1, mat<4, 3, T, Q> const& m2)
+ 	{
+-		const T SrcA00 = m1[0][0];
+-		const T SrcA01 = m1[0][1];
+-		const T SrcA02 = m1[0][2];
+-		const T SrcA03 = m1[0][3];
+-		const T SrcA10 = m1[1][0];
+-		const T SrcA11 = m1[1][1];
+-		const T SrcA12 = m1[1][2];
+-		const T SrcA13 = m1[1][3];
+-		const T SrcA20 = m1[2][0];
+-		const T SrcA21 = m1[2][1];
+-		const T SrcA22 = m1[2][2];
+-		const T SrcA23 = m1[2][3];
+-
+-		const T SrcB00 = m2[0][0];
+-		const T SrcB01 = m2[0][1];
+-		const T SrcB02 = m2[0][2];
+-		const T SrcB10 = m2[1][0];
+-		const T SrcB11 = m2[1][1];
+-		const T SrcB12 = m2[1][2];
+-		const T SrcB20 = m2[2][0];
+-		const T SrcB21 = m2[2][1];
+-		const T SrcB22 = m2[2][2];
+-		const T SrcB30 = m2[3][0];
+-		const T SrcB31 = m2[3][1];
+-		const T SrcB32 = m2[3][2];
+-
+-		mat<4, 4, T, Q> Result;
+-		Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01 + SrcA20 * SrcB02;
+-		Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01 + SrcA21 * SrcB02;
+-		Result[0][2] = SrcA02 * SrcB00 + SrcA12 * SrcB01 + SrcA22 * SrcB02;
+-		Result[0][3] = SrcA03 * SrcB00 + SrcA13 * SrcB01 + SrcA23 * SrcB02;
+-		Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11 + SrcA20 * SrcB12;
+-		Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11 + SrcA21 * SrcB12;
+-		Result[1][2] = SrcA02 * SrcB10 + SrcA12 * SrcB11 + SrcA22 * SrcB12;
+-		Result[1][3] = SrcA03 * SrcB10 + SrcA13 * SrcB11 + SrcA23 * SrcB12;
+-		Result[2][0] = SrcA00 * SrcB20 + SrcA10 * SrcB21 + SrcA20 * SrcB22;
+-		Result[2][1] = SrcA01 * SrcB20 + SrcA11 * SrcB21 + SrcA21 * SrcB22;
+-		Result[2][2] = SrcA02 * SrcB20 + SrcA12 * SrcB21 + SrcA22 * SrcB22;
+-		Result[2][3] = SrcA03 * SrcB20 + SrcA13 * SrcB21 + SrcA23 * SrcB22;
+-		Result[3][0] = SrcA00 * SrcB30 + SrcA10 * SrcB31 + SrcA20 * SrcB32;
+-		Result[3][1] = SrcA01 * SrcB30 + SrcA11 * SrcB31 + SrcA21 * SrcB32;
+-		Result[3][2] = SrcA02 * SrcB30 + SrcA12 * SrcB31 + SrcA22 * SrcB32;
+-		Result[3][3] = SrcA03 * SrcB30 + SrcA13 * SrcB31 + SrcA23 * SrcB32;
+-		return Result;
++		return mat<4, 4, T, Q>(
++			m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2],
++			m1[0][1] * m2[0][0] + m1[1][1] * m2[0][1] + m1[2][1] * m2[0][2],
++			m1[0][2] * m2[0][0] + m1[1][2] * m2[0][1] + m1[2][2] * m2[0][2],
++			m1[0][3] * m2[0][0] + m1[1][3] * m2[0][1] + m1[2][3] * m2[0][2],
++			m1[0][0] * m2[1][0] + m1[1][0] * m2[1][1] + m1[2][0] * m2[1][2],
++			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1] + m1[2][1] * m2[1][2],
++			m1[0][2] * m2[1][0] + m1[1][2] * m2[1][1] + m1[2][2] * m2[1][2],
++			m1[0][3] * m2[1][0] + m1[1][3] * m2[1][1] + m1[2][3] * m2[1][2],
++			m1[0][0] * m2[2][0] + m1[1][0] * m2[2][1] + m1[2][0] * m2[2][2],
++			m1[0][1] * m2[2][0] + m1[1][1] * m2[2][1] + m1[2][1] * m2[2][2],
++			m1[0][2] * m2[2][0] + m1[1][2] * m2[2][1] + m1[2][2] * m2[2][2],
++			m1[0][3] * m2[2][0] + m1[1][3] * m2[2][1] + m1[2][3] * m2[2][2],
++			m1[0][0] * m2[3][0] + m1[1][0] * m2[3][1] + m1[2][0] * m2[3][2],
++			m1[0][1] * m2[3][0] + m1[1][1] * m2[3][1] + m1[2][1] * m2[3][2],
++			m1[0][2] * m2[3][0] + m1[1][2] * m2[3][1] + m1[2][2] * m2[3][2],
++			m1[0][3] * m2[3][0] + m1[1][3] * m2[3][1] + m1[2][3] * m2[3][2]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
+diff --git a/glm/detail/type_mat4x2.inl b/glm/detail/type_mat4x2.inl
+index 2b9b617a3..0b7ff048c 100644
+--- a/glm/detail/type_mat4x2.inl
++++ b/glm/detail/type_mat4x2.inl
+@@ -486,30 +486,11 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<2, 2, T, Q> operator*(mat<4, 2, T, Q> const& m1, mat<2, 4, T, Q> const& m2)
+ 	{
+-		T const SrcA00 = m1[0][0];
+-		T const SrcA01 = m1[0][1];
+-		T const SrcA10 = m1[1][0];
+-		T const SrcA11 = m1[1][1];
+-		T const SrcA20 = m1[2][0];
+-		T const SrcA21 = m1[2][1];
+-		T const SrcA30 = m1[3][0];
+-		T const SrcA31 = m1[3][1];
+-
+-		T const SrcB00 = m2[0][0];
+-		T const SrcB01 = m2[0][1];
+-		T const SrcB02 = m2[0][2];
+-		T const SrcB03 = m2[0][3];
+-		T const SrcB10 = m2[1][0];
+-		T const SrcB11 = m2[1][1];
+-		T const SrcB12 = m2[1][2];
+-		T const SrcB13 = m2[1][3];
+-
+-		mat<2, 2, T, Q> Result;
+-		Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01 + SrcA20 * SrcB02 + SrcA30 * SrcB03;
+-		Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01 + SrcA21 * SrcB02 + SrcA31 * SrcB03;
+-		Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11 + SrcA20 * SrcB12 + SrcA30 * SrcB13;
+-		Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11 + SrcA21 * SrcB12 + SrcA31 * SrcB13;
+-		return Result;
++		return mat<2, 2, T, Q>(
++			m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2] + m1[3][0] * m2[0][3],
++			m1[0][1] * m2[0][0] + m1[1][1] * m2[0][1] + m1[2][1] * m2[0][2] + m1[3][1] * m2[0][3],
++			m1[0][0] * m2[1][0] + m1[1][0] * m2[1][1] + m1[2][0] * m2[1][2] + m1[3][0] * m2[1][3],
++			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1] + m1[2][1] * m2[1][2] + m1[3][1] * m2[1][3]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
+diff --git a/glm/detail/type_mat4x3.inl b/glm/detail/type_mat4x3.inl
+index 8430bc07a..ab438ffce 100644
+--- a/glm/detail/type_mat4x3.inl
++++ b/glm/detail/type_mat4x3.inl
+@@ -505,43 +505,16 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<3, 3, T, Q> operator*(mat<4, 3, T, Q> const& m1, mat<3, 4, T, Q> const& m2)
+ 	{
+-		T const SrcA00 = m1[0][0];
+-		T const SrcA01 = m1[0][1];
+-		T const SrcA02 = m1[0][2];
+-		T const SrcA10 = m1[1][0];
+-		T const SrcA11 = m1[1][1];
+-		T const SrcA12 = m1[1][2];
+-		T const SrcA20 = m1[2][0];
+-		T const SrcA21 = m1[2][1];
+-		T const SrcA22 = m1[2][2];
+-		T const SrcA30 = m1[3][0];
+-		T const SrcA31 = m1[3][1];
+-		T const SrcA32 = m1[3][2];
+-
+-		T const SrcB00 = m2[0][0];
+-		T const SrcB01 = m2[0][1];
+-		T const SrcB02 = m2[0][2];
+-		T const SrcB03 = m2[0][3];
+-		T const SrcB10 = m2[1][0];
+-		T const SrcB11 = m2[1][1];
+-		T const SrcB12 = m2[1][2];
+-		T const SrcB13 = m2[1][3];
+-		T const SrcB20 = m2[2][0];
+-		T const SrcB21 = m2[2][1];
+-		T const SrcB22 = m2[2][2];
+-		T const SrcB23 = m2[2][3];
+-
+-		mat<3, 3, T, Q> Result;
+-		Result[0][0] = SrcA00 * SrcB00 + SrcA10 * SrcB01 + SrcA20 * SrcB02 + SrcA30 * SrcB03;
+-		Result[0][1] = SrcA01 * SrcB00 + SrcA11 * SrcB01 + SrcA21 * SrcB02 + SrcA31 * SrcB03;
+-		Result[0][2] = SrcA02 * SrcB00 + SrcA12 * SrcB01 + SrcA22 * SrcB02 + SrcA32 * SrcB03;
+-		Result[1][0] = SrcA00 * SrcB10 + SrcA10 * SrcB11 + SrcA20 * SrcB12 + SrcA30 * SrcB13;
+-		Result[1][1] = SrcA01 * SrcB10 + SrcA11 * SrcB11 + SrcA21 * SrcB12 + SrcA31 * SrcB13;
+-		Result[1][2] = SrcA02 * SrcB10 + SrcA12 * SrcB11 + SrcA22 * SrcB12 + SrcA32 * SrcB13;
+-		Result[2][0] = SrcA00 * SrcB20 + SrcA10 * SrcB21 + SrcA20 * SrcB22 + SrcA30 * SrcB23;
+-		Result[2][1] = SrcA01 * SrcB20 + SrcA11 * SrcB21 + SrcA21 * SrcB22 + SrcA31 * SrcB23;
+-		Result[2][2] = SrcA02 * SrcB20 + SrcA12 * SrcB21 + SrcA22 * SrcB22 + SrcA32 * SrcB23;
+-		return Result;
++		return mat<3, 3, T, Q>(
++			m1[0][0] * m2[0][0] + m1[1][0] * m2[0][1] + m1[2][0] * m2[0][2] + m1[3][0] * m2[0][3],
++			m1[0][1] * m2[0][0] + m1[1][1] * m2[0][1] + m1[2][1] * m2[0][2] + m1[3][1] * m2[0][3],
++			m1[0][2] * m2[0][0] + m1[1][2] * m2[0][1] + m1[2][2] * m2[0][2] + m1[3][2] * m2[0][3],
++			m1[0][0] * m2[1][0] + m1[1][0] * m2[1][1] + m1[2][0] * m2[1][2] + m1[3][0] * m2[1][3],
++			m1[0][1] * m2[1][0] + m1[1][1] * m2[1][1] + m1[2][1] * m2[1][2] + m1[3][1] * m2[1][3],
++			m1[0][2] * m2[1][0] + m1[1][2] * m2[1][1] + m1[2][2] * m2[1][2] + m1[3][2] * m2[1][3],
++			m1[0][0] * m2[2][0] + m1[1][0] * m2[2][1] + m1[2][0] * m2[2][2] + m1[3][0] * m2[2][3],
++			m1[0][1] * m2[2][0] + m1[1][1] * m2[2][1] + m1[2][1] * m2[2][2] + m1[3][1] * m2[2][3],
++			m1[0][2] * m2[2][0] + m1[1][2] * m2[2][1] + m1[2][2] * m2[2][2] + m1[3][2] * m2[2][3]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
+diff --git a/glm/detail/type_mat4x4.inl b/glm/detail/type_mat4x4.inl
+index 116731d74..4d7a74824 100644
+--- a/glm/detail/type_mat4x4.inl
++++ b/glm/detail/type_mat4x4.inl
+@@ -629,22 +629,11 @@ namespace glm
+ 	template<typename T, qualifier Q>
+ 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q> operator*(mat<4, 4, T, Q> const& m1, mat<4, 4, T, Q> const& m2)
+ 	{
+-		typename mat<4, 4, T, Q>::col_type const SrcA0 = m1[0];
+-		typename mat<4, 4, T, Q>::col_type const SrcA1 = m1[1];
+-		typename mat<4, 4, T, Q>::col_type const SrcA2 = m1[2];
+-		typename mat<4, 4, T, Q>::col_type const SrcA3 = m1[3];
+-
+-		typename mat<4, 4, T, Q>::col_type const SrcB0 = m2[0];
+-		typename mat<4, 4, T, Q>::col_type const SrcB1 = m2[1];
+-		typename mat<4, 4, T, Q>::col_type const SrcB2 = m2[2];
+-		typename mat<4, 4, T, Q>::col_type const SrcB3 = m2[3];
+-
+-		mat<4, 4, T, Q> Result;
+-		Result[0] = SrcA0 * SrcB0[0] + SrcA1 * SrcB0[1] + SrcA2 * SrcB0[2] + SrcA3 * SrcB0[3];
+-		Result[1] = SrcA0 * SrcB1[0] + SrcA1 * SrcB1[1] + SrcA2 * SrcB1[2] + SrcA3 * SrcB1[3];
+-		Result[2] = SrcA0 * SrcB2[0] + SrcA1 * SrcB2[1] + SrcA2 * SrcB2[2] + SrcA3 * SrcB2[3];
+-		Result[3] = SrcA0 * SrcB3[0] + SrcA1 * SrcB3[1] + SrcA2 * SrcB3[2] + SrcA3 * SrcB3[3];
+-		return Result;
++		return mat<4, 4, T, Q>(
++			m1[0] * m2[0][0] + m1[1] * m2[0][1] + m1[2] * m2[0][2] + m1[3] * m2[0][3],
++			m1[0] * m2[1][0] + m1[1] * m2[1][1] + m1[2] * m2[1][2] + m1[3] * m2[1][3],
++			m1[0] * m2[2][0] + m1[1] * m2[2][1] + m1[2] * m2[2][2] + m1[3] * m2[2][3],
++			m1[0] * m2[3][0] + m1[1] * m2[3][1] + m1[2] * m2[3][2] + m1[3] * m2[3][3]);
+ 	}
+ 
+ 	template<typename T, qualifier Q>
