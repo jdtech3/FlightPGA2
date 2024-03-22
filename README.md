@@ -11,7 +11,12 @@ where we tried to do the project in Verilog only.
   * `bsp/`: board support package for Nios II core
   * `raspberrypi/`: Python code for running on Raspberry Pi to provide interface to USB joystick
 
+### Patches required
+
+  * `glm` needs to be patched using `glm_PR1264_fix_uninitialized_in_constexpr_warning.patch` taken from [unmerged PR](https://github.com/g-truc/glm/pull/1264)
+  * `random.tcc` from `nios2-elf` includes needs to be patched by turning all `std::max(<constant>, ... )` calls into `std::max((double)<constant>, ...)`
+
 ### Team
 
-* [Joe Dai](https://github.com/jdtech3/)
-* [Swarnava Ghosh](https://github.com/swarnavaghosh04/)
+  * [Joe Dai](https://github.com/jdtech3/)
+  * [Swarnava Ghosh](https://github.com/swarnavaghosh04/)

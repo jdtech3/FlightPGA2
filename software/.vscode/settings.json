@@ -52,10 +52,15 @@
         "ratio": "cpp",
         "iomanip": "cpp",
         "queue": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "alt_types.h": "c",
+        "nios2.h": "c",
+        "alt_exceptions.h": "c"
     },
     "C_Cpp.default.includePath": [
         "/home/jdtech/FlightGPA2/software/lib/glm",
-        "/home/jdtech/FlightGPA2/software/include"
-    ]
+        "/home/jdtech/FlightGPA2/software/include",
+        "/home/jdtech/FlightGPA2/bsp/HAL/inc/"
+    ],
+    "cmake.configureOnOpen": true
 }

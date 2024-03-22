@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <deque>
 #include <cstring>  // for memset
 #include <memory>   // for smart pointers
 #include <iostream>
@@ -24,23 +24,23 @@ class Display {
         u16* current_pixel_buf_;
         u16 buf1_[PIXEL_BUF_HEIGHT][512];   // 512 needed for padding (?)
         u16 buf2_[PIXEL_BUF_HEIGHT][512];
-        std::vector<std::unique_ptr<DisplayObject>> display_objs_;
+        std::deque<std::unique_ptr<DisplayObject>> display_objs_;
 
         void draw_current_frame_();
         void erase_last_frame_();
         void swap_buffer_blocking_();
 
     public:
-        u32 cur_frame;
+        i32 cur_frame_id;
 
         Display(u32 pixel_buf_controller_addr);
         void clear(u8 buf = 0);
         void draw_frame();
         void add_display_obj(std::unique_ptr<DisplayObject> display_obj);
-        
+
         template <class T>
         void add_display_obj(T&& display_obj) {
-            display_obj.frame_id = cur_frame;
+            display_obj.frame_id = cur_frame_id;
             display_objs_.push_back(std::make_unique<T>(display_obj));
         }
 };

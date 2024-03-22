@@ -13,12 +13,15 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 
-#define NUM_BOXES   60
+#define DEBUG
+// #define PROFILING_MODE
+
+#define NUM_BOXES   4
 #define BOX_SIZE    2
 #define BOX_COLOR   0x0000
 #define LINE_COLOR  0x881F
 
-#define CLOCKS_PER_SEC  16.0f   // redefine to correct val
+#define CLOCKS_PER_SEC  8.0f   // redefine to correct val
 
 typedef enum direction {
     UP_LEFT,
@@ -33,15 +36,15 @@ typedef struct box {
     direction_t direction;
 } box_t;
 
-float get_fps(Display& display) { 
+float get_fps(Display& display) {
     static clock_t prev_time;
     static u32 prev_frame_id;
 
     clock_t cur_time = clock();
-    float fps = static_cast<float>(display.cur_frame - prev_frame_id) / (static_cast<float>(cur_time - prev_time) / CLOCKS_PER_SEC);
+    float fps = static_cast<float>(display.cur_frame_id - prev_frame_id) / (static_cast<float>(cur_time - prev_time) / CLOCKS_PER_SEC);
 
     prev_time = cur_time;
-    prev_frame_id = display.cur_frame;
+    prev_frame_id = display.cur_frame_id;
 
     return fps;
 }
@@ -58,6 +61,7 @@ int main() {
 
     volatile char* char_buf_start = reinterpret_cast<char*>(0x09000000);
     char local_char_buf[80];
+
 
     box_t boxes[NUM_BOXES] = {};
 
@@ -108,13 +112,17 @@ int main() {
 
         display.draw_frame();
 
-        float fps = get_fps(display);
-        sprintf(local_char_buf, "FPS: %.2f", fps);
-        strncpy((char*)(char_buf_start), local_char_buf, 80);
-        std::cout << "FPS: " << local_char_buf << std::endl;
+        #ifdef DEBUG
+            if (display.cur_frame_id % 60 == 0) {
+                float fps = get_fps(display);
+                sprintf(local_char_buf, "FPS: %.2f", fps);
+                strncpy((char*)(char_buf_start), local_char_buf, 80);
+                std::cout << local_char_buf << std::endl;
+            }
+        #endif
 
         #ifdef PROFILING_MODE
-            if (display.cur_frame == 3600) break;
+            if (display.cur_frame_id == 3600) break;
         #endif
     }
 

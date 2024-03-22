@@ -4,7 +4,7 @@
  * Machine generated for CPU 'Nios2' in SOPC Builder design 'Computer_System'
  * SOPC Builder design path: ../fpga/Computer_System.sopcinfo
  *
- * Generated: Sun Mar 17 11:48:14 EDT 2024
+ * Generated: Fri Mar 22 12:45:23 EDT 2024
  */
 
 /*
@@ -749,6 +749,6 @@
 #define ALT_INCLUDE_INSTRUCTION_RELATED_EXCEPTION_API
 #define ALT_MAX_FD 32
 #define ALT_SYS_CLK INTERVAL_TIMER
-#define ALT_TIMESTAMP_CLK INTERVAL_TIMER_2
+#define ALT_TIMESTAMP_CLK INTERVAL_TIMER
 
 #endif /* __SYSTEM_H_ */

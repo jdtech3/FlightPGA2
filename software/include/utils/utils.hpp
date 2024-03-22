@@ -1,9 +1,8 @@
-#ifndef __UTILS_UTILS_H
-#define __UTILS_UTILS_H
+#ifndef __UTILS_UTILS_HPP
+#define __UTILS_UTILS_HPP
 
-#include "stdlib.h"
+#include <cstdlib>
 
 int randint(int, int);
-void swap(int*, int*);
 
-#endif  // __UTILS_UTILS_H
+#endif  // __UTILS_UTILS_HPP

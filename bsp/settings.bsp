@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>18.1</BspVersion>
-        <BspGeneratedTimeStamp>Mar 22, 2024 12:32:01 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1711081921369</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 22, 2024 12:45:22 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1711125922883</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/jdtech/FlightGPA2/bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../fpga/Computer_System.sopcinfo</SopcDesignFile>
@@ -26,7 +26,7 @@
                 <SettingName>hal.timestamp_timer</SettingName>
                 <Identifier>ALT_TIMESTAMP_CLK</Identifier>
                 <Type>UnquotedString</Type>
-                <Value>Interval_Timer_2</Value>
+                <Value>Interval_Timer</Value>
                 <DefaultValue>none</DefaultValue>
                 <DestinationFile>system_h_define</DestinationFile>
                 <Description>Slave descriptor of timestamp timer device. This device is used by Altera HAL timestamp drivers for high-resolution time measurement. This setting defines the value of ALT_TIMESTAMP_CLK in system.h.</Description>

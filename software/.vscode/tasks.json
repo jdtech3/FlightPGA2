@@ -12,19 +12,45 @@
             "label": "Upload to Nios2",
             "type": "shell",
             "command": "nios2-download",
-            "args": ["--stop", "FlightGPA2.elf"]
+            "args": ["--stop", "FlightGPA2.elf"],
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "clear": true,
+                "close": true
+            }
         },
         {
             "label": "Nios2 Console",
             "type": "shell",
-            "command": "nios2-terminal"
+            "command": "nios2-terminal",
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ]
         },
         {
             "label": "Build and upload to Nios2",
             "dependsOn": [
                 "Build",
                 "Upload to Nios2",
-                "Nios2 Console"
+                // "Nios2 Console"
             ],
             "dependsOrder": "sequence"
         }
