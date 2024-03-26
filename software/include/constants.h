@@ -11,6 +11,6 @@
 #define PIXEL_BUF_WIDTH         320
 #define PIXEL_BUF_HEIGHT        240
 
-#define ERASE_COLOR             0xFFFF
+#define ERASE_COLOR             0x0000
 
 #endif  // __CONSTANTS_H

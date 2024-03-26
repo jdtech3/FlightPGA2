@@ -21,19 +21,19 @@ Display::Display(u32 pixel_buf_controller_addr) {
 void Display::draw_current_frame_() {
     if (display_objs_.empty()) return;
 
-    auto iter = display_objs_.rbegin();     // current frame objs are at the back, so reverse iterate
-    while ((**iter).frame_id == cur_frame_id) {
-        (**iter).draw(current_pixel_buf_);
-        iter++;
+    // Current frame objs are at the back, so reverse iterate
+    for (auto iter = display_objs_.rbegin(); iter != display_objs_.rend(); ++iter) {
+        if ((*iter)->frame_id != cur_frame_id) break;
+        (*iter)->draw(current_pixel_buf_);
     }
 }
 
 void Display::erase_last_frame_() {
     if (cur_frame_id < 2) return;     // no need to erase anything on first 2 frames
 
-    while ((*display_objs_.front()).frame_id == cur_frame_id - 2) {
-        (*display_objs_.front()).color = ERASE_COLOR;
-        (*display_objs_.front()).draw(current_pixel_buf_);
+    while (display_objs_.front()->frame_id == cur_frame_id - 2) {
+        display_objs_.front()->color = ERASE_COLOR;
+        display_objs_.front()->draw(current_pixel_buf_);
         display_objs_.pop_front();
     }
 }
@@ -74,7 +74,10 @@ void Display::clear(u8 buf) {
 
 void Display::draw_frame() {
     erase_last_frame_();
+    // clear();
     draw_current_frame_();
+    // display_objs_.clear();
+    // display_objs_.shrink_to_fit();
     swap_buffer_blocking_();
     cur_frame_id++;
 

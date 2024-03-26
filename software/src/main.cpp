@@ -1,6 +1,12 @@
-#include <iostream>
+// #define DEBUG
+// #define PROFILING_MODE
+#define GLM_ENABLE_EXPERIMENTAL
+// #define ENABLE_PS2_MOUSE
 
-#include <time.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <memory>
 #include <unistd.h>
 
 #include "address_map_nios2.h"
@@ -9,19 +15,15 @@
 #include "display/primitives.hpp"
 #include "graphics/camera.hpp"
 #include "utils/utils.hpp"
+#include "utils/clock.hpp"
+#include "input/mouse.hpp"
 
-#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 
-#define DEBUG
-// #define PROFILING_MODE
-
-#define NUM_BOXES   4
-#define BOX_SIZE    2
-#define BOX_COLOR   0x0000
+#define NUM_BOXES   256
+#define BOX_SIZE    4
+#define BOX_COLOR   0xFFFF
 #define LINE_COLOR  0x881F
-
-#define CLOCKS_PER_SEC  8.0f   // redefine to correct val
 
 typedef enum direction {
     UP_LEFT,
@@ -30,18 +32,20 @@ typedef enum direction {
     DOWN_RIGHT,
 } direction_t;
 
-typedef struct box {
-    int x;
-    int y;
-    direction_t direction;
-} box_t;
+class Box {
+    public:
+        u16 x;
+        u16 y;
+        direction_t direction;
+        Box(u16 x, u16 y, direction_t direction) : x(x), y(y), direction(direction) {};
+};
 
 float get_fps(Display& display) {
-    static clock_t prev_time;
+    static u32 prev_time;
     static u32 prev_frame_id;
 
-    clock_t cur_time = clock();
-    float fps = static_cast<float>(display.cur_frame_id - prev_frame_id) / (static_cast<float>(cur_time - prev_time) / CLOCKS_PER_SEC);
+    u32 cur_time = get_clock_ms();
+    float fps = static_cast<float>(display.cur_frame_id - prev_frame_id) / (static_cast<float>(cur_time - prev_time) / 1000.0f);
 
     prev_time = cur_time;
     prev_frame_id = display.cur_frame_id;
@@ -59,67 +63,80 @@ int main() {
     glm::mat4 cam = camera(static_cast<float>(randint(0, 1000)) / 100.0f, glm::vec2(0.0f));
     std::cout << glm::to_string(cam) << std::endl;
 
-    volatile char* char_buf_start = reinterpret_cast<char*>(0x09000000);
-    char local_char_buf[80];
+    volatile char* char_buf_start = reinterpret_cast<volatile char*>(0x09000000);
+    char local_char_buf[80] = {};
+    memcpy(const_cast<char*>(char_buf_start), local_char_buf, sizeof(local_char_buf));  // clear char buf
 
+    init_random();
+    init_timer_isr();
+    #ifdef ENABLE_PS2_MOUSE
+        init_mouse_isr();
+    #endif
 
-    box_t boxes[NUM_BOXES] = {};
-
-    for (int i = 0; i < NUM_BOXES; i++) {
-        boxes[i].x = randint(0, PIXEL_BUF_WIDTH);
-        boxes[i].y = randint(0, PIXEL_BUF_HEIGHT);
-        boxes[i].direction = (direction_t) randint(UP_LEFT, DOWN_RIGHT + 1);
-    }
+    std::shared_ptr<Box> boxes[NUM_BOXES];
+    for (int i = 0; i < NUM_BOXES; i++)
+        boxes[i] = std::make_shared<Box>(
+            randint(0, PIXEL_BUF_WIDTH - BOX_SIZE),
+            randint(0, PIXEL_BUF_HEIGHT - BOX_SIZE),
+            (direction_t) randint(UP_LEFT, DOWN_RIGHT + 1)
+        );
 
     while (true) {
-        for (int i = 0; i < NUM_BOXES; i++) {
-            if (boxes[i].x == 0) 
-                boxes[i].direction = (boxes[i].direction == UP_LEFT) ? UP_RIGHT : DOWN_RIGHT;
-            else if (boxes[i].x + BOX_SIZE == PIXEL_BUF_WIDTH - 1)
-                boxes[i].direction = (boxes[i].direction == UP_RIGHT) ? UP_LEFT : DOWN_LEFT;
+        for (std::shared_ptr<Box>& box : boxes) {
+            if ((*box).x == 0)
+                (*box).direction = ((*box).direction == UP_LEFT) ? UP_RIGHT : DOWN_RIGHT;
+            else if ((*box).x + BOX_SIZE == PIXEL_BUF_WIDTH - 1)
+                (*box).direction = ((*box).direction == UP_RIGHT) ? UP_LEFT : DOWN_LEFT;
 
-            if (boxes[i].y == 0) 
-                boxes[i].direction = (boxes[i].direction == UP_LEFT) ? DOWN_LEFT : DOWN_RIGHT;
-            else if (boxes[i].y + BOX_SIZE == PIXEL_BUF_HEIGHT - 1)
-                boxes[i].direction = (boxes[i].direction == DOWN_LEFT) ? UP_LEFT : UP_RIGHT;
+            if ((*box).y == 0) 
+                (*box).direction = ((*box).direction == UP_LEFT) ? DOWN_LEFT : DOWN_RIGHT;
+            else if ((*box).y + BOX_SIZE == PIXEL_BUF_HEIGHT - 1)
+                (*box).direction = ((*box).direction == DOWN_LEFT) ? UP_LEFT : UP_RIGHT;
 
-            switch (boxes[i].direction) {
+            switch ((*box).direction) {
                 case UP_LEFT:
-                    boxes[i].x -= 1;
-                    boxes[i].y -= 1;
+                    (*box).x -= 1;
+                    (*box).y -= 1;
                     break;
                 case UP_RIGHT:
-                    boxes[i].x += 1;
-                    boxes[i].y -= 1;
+                    (*box).x += 1;
+                    (*box).y -= 1;
                     break;
                 case DOWN_LEFT:
-                    boxes[i].x -= 1;
-                    boxes[i].y += 1;
+                    (*box).x -= 1;
+                    (*box).y += 1;
                     break;
                 case DOWN_RIGHT:
-                    boxes[i].x += 1;
-                    boxes[i].y += 1;
+                    (*box).x += 1;
+                    (*box).y += 1;
                     break;
             }
         }
 
         for (int i = 0; i < NUM_BOXES; i++) {
             if (i != NUM_BOXES - 1)
-                display.add_display_obj(Line(boxes[i].x, boxes[i].y, boxes[i+1].x, boxes[i+1].y, LINE_COLOR));
+                display.add_display_obj(Line((*boxes[i]).x, (*boxes[i]).y, (*boxes[i-1]).x, (*boxes[i-1]).y, LINE_COLOR));
 
-            display.add_display_obj(Rectangle(boxes[i].x, boxes[i].y, BOX_SIZE, BOX_SIZE, BOX_COLOR));
+            display.add_display_obj(Rectangle((*boxes[i]).x, (*boxes[i]).y, BOX_SIZE, BOX_SIZE, BOX_COLOR));
         }
 
         display.draw_frame();
 
-        #ifdef DEBUG
-            if (display.cur_frame_id % 60 == 0) {
-                float fps = get_fps(display);
-                sprintf(local_char_buf, "FPS: %.2f", fps);
-                strncpy((char*)(char_buf_start), local_char_buf, 80);
+        if (display.cur_frame_id % 60 == 0) {   // only update once a second
+            float fps = get_fps(display);
+            sprintf(const_cast<char*>(char_buf_start),
+                    "FPS: %.2f | Frame %ld", fps, display.cur_frame_id); // write directly to save a memory access
+
+            #ifdef DEBUG
+                strncpy(local_char_buf, const_cast<char*>(char_buf_start), sizeof(local_char_buf));
                 std::cout << local_char_buf << std::endl;
-            }
-        #endif
+                std::cout << display.display_objs_.size() << " / " << display.display_objs_.max_size() << std::endl;
+
+                #ifdef ENABLE_PS2_MOUSE
+                    std::cout << "Mouse: [x] " << get_mouse_mm_x() << " [y] " << get_mouse_mm_y() << std::endl;
+                #endif
+            #endif
+        }
 
         #ifdef PROFILING_MODE
             if (display.cur_frame_id == 3600) break;
