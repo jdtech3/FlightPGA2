@@ -1,8 +1,6 @@
-#ifndef __UTILS_UTILS_HPP
-#define __UTILS_UTILS_HPP
+#pragma once
 
 #include <cstdlib>
 
-int randint(int, int);
 
-#endif  // __UTILS_UTILS_HPP
+int randint(int, int);

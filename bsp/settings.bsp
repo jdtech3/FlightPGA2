@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>18.1</BspVersion>
-        <BspGeneratedTimeStamp>Mar 22, 2024 12:45:22 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1711125922883</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 25, 2024 7:38:47 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1711409927034</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/jdtech/FlightGPA2/bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../fpga/Computer_System.sopcinfo</SopcDesignFile>
@@ -1072,4 +1072,76 @@
                 <sectionName>.stack</sectionName>
                 <regionName>SDRAM</regionName>
         </LinkerSection>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Video_In_Subsystem_Video_In_Edge_Detection_Subsystem_Edge_Detection_Router_Controller</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Video_In_Subsystem_Video_In_DMA</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>VGA_Subsystem_VGA_Pixel_RGB_Resampler</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>VGA_Subsystem_VGA_Pixel_DMA</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>VGA_Subsystem_Char_Buf_Subsystem_Char_Buf_DMA</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>SysID</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Slider_Switches</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Pushbuttons</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>LEDs</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>IrDA</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Interval_Timer_2</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>HEX5_HEX4</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>HEX3_HEX0</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Expansion_JP2</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Expansion_JP1</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>Audio_Subsystem_Audio</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>AV_Config</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>ADC</moduleName>
+        </DriverPackageInfo>
 </sch:Settings>

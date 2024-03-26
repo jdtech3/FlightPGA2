@@ -4,7 +4,7 @@
  * Machine generated for CPU 'Nios2' in SOPC Builder design 'Computer_System'
  * SOPC Builder design path: ../fpga/Computer_System.sopcinfo
  *
- * Generated: Sat Mar 16 22:16:04 EDT 2024
+ * Generated: Mon Mar 25 19:38:37 EDT 2024
  */
 
 /*
@@ -60,15 +60,8 @@
 
 #include "altera_nios2_gen2_irq.h"
 #include "altera_avalon_jtag_uart.h"
-#include "altera_avalon_sysid_qsys.h"
 #include "altera_avalon_timer.h"
-#include "altera_up_avalon_adc.h"
-#include "altera_up_avalon_audio.h"
-#include "altera_up_avalon_audio_and_video_config.h"
-#include "altera_up_avalon_irda.h"
 #include "altera_up_avalon_ps2.h"
-#include "altera_up_avalon_video_dma_controller.h"
-#include "altera_up_avalon_video_rgb_resampler.h"
 
 /*
  * Allocate the device storage
@@ -76,19 +69,9 @@
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2, Nios2);
 ALTERA_AVALON_JTAG_UART_INSTANCE ( JTAG_UART, JTAG_UART);
-ALTERA_AVALON_SYSID_QSYS_INSTANCE ( SYSID, SysID);
 ALTERA_AVALON_TIMER_INSTANCE ( INTERVAL_TIMER, Interval_Timer);
-ALTERA_AVALON_TIMER_INSTANCE ( INTERVAL_TIMER_2, Interval_Timer_2);
-ALTERA_UP_AVALON_ADC_INSTANCE ( ADC, ADC);
-ALTERA_UP_AVALON_AUDIO_AND_VIDEO_CONFIG_INSTANCE ( AV_CONFIG, AV_Config);
-ALTERA_UP_AVALON_AUDIO_INSTANCE ( AUDIO_SUBSYSTEM_AUDIO, Audio_Subsystem_Audio);
-ALTERA_UP_AVALON_IRDA_INSTANCE ( IRDA, IrDA);
 ALTERA_UP_AVALON_PS2_INSTANCE ( PS2_PORT, PS2_Port);
 ALTERA_UP_AVALON_PS2_INSTANCE ( PS2_PORT_DUAL, PS2_Port_Dual);
-ALTERA_UP_AVALON_VIDEO_DMA_CONTROLLER_INSTANCE ( VGA_SUBSYSTEM_CHAR_BUF_SUBSYSTEM_CHAR_BUF_DMA, VGA_Subsystem_Char_Buf_Subsystem_Char_Buf_DMA);
-ALTERA_UP_AVALON_VIDEO_DMA_CONTROLLER_INSTANCE ( VGA_SUBSYSTEM_VGA_PIXEL_DMA, VGA_Subsystem_VGA_Pixel_DMA);
-ALTERA_UP_AVALON_VIDEO_DMA_CONTROLLER_INSTANCE ( VIDEO_IN_SUBSYSTEM_VIDEO_IN_DMA, Video_In_Subsystem_Video_In_DMA);
-ALTERA_UP_AVALON_VIDEO_RGB_RESAMPLER_INSTANCE ( VGA_SUBSYSTEM_VGA_PIXEL_RGB_RESAMPLER, VGA_Subsystem_VGA_Pixel_RGB_Resampler);
 
 /*
  * Initialize the interrupt controller devices
@@ -112,17 +95,7 @@ void alt_irq_init ( const void* base )
 void alt_sys_init( void )
 {
     ALTERA_AVALON_TIMER_INIT ( INTERVAL_TIMER, Interval_Timer);
-    ALTERA_AVALON_TIMER_INIT ( INTERVAL_TIMER_2, Interval_Timer_2);
     ALTERA_AVALON_JTAG_UART_INIT ( JTAG_UART, JTAG_UART);
-    ALTERA_AVALON_SYSID_QSYS_INIT ( SYSID, SysID);
-    ALTERA_UP_AVALON_ADC_INIT ( ADC, ADC);
-    ALTERA_UP_AVALON_AUDIO_AND_VIDEO_CONFIG_INIT ( AV_CONFIG, AV_Config);
-    ALTERA_UP_AVALON_AUDIO_INIT ( AUDIO_SUBSYSTEM_AUDIO, Audio_Subsystem_Audio);
-    ALTERA_UP_AVALON_IRDA_INIT ( IRDA, IrDA);
     ALTERA_UP_AVALON_PS2_INIT ( PS2_PORT, PS2_Port);
     ALTERA_UP_AVALON_PS2_INIT ( PS2_PORT_DUAL, PS2_Port_Dual);
-    ALTERA_UP_AVALON_VIDEO_DMA_CONTROLLER_INIT ( VGA_SUBSYSTEM_CHAR_BUF_SUBSYSTEM_CHAR_BUF_DMA, VGA_Subsystem_Char_Buf_Subsystem_Char_Buf_DMA);
-    ALTERA_UP_AVALON_VIDEO_DMA_CONTROLLER_INIT ( VGA_SUBSYSTEM_VGA_PIXEL_DMA, VGA_Subsystem_VGA_Pixel_DMA);
-    ALTERA_UP_AVALON_VIDEO_DMA_CONTROLLER_INIT ( VIDEO_IN_SUBSYSTEM_VIDEO_IN_DMA, Video_In_Subsystem_Video_In_DMA);
-    ALTERA_UP_AVALON_VIDEO_RGB_RESAMPLER_INIT ( VGA_SUBSYSTEM_VGA_PIXEL_RGB_RESAMPLER, VGA_Subsystem_VGA_Pixel_RGB_Resampler);
 }

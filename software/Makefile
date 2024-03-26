@@ -148,7 +148,10 @@ CXX_SRCS += $(wildcard src/audio/*.cpp)
 CXX_SRCS += $(wildcard src/display/*.cpp)
 CXX_SRCS += $(wildcard src/utils/*.cpp)
 CXX_SRCS += $(wildcard src/graphics/*.cpp)
+CXX_SRCS += $(wildcard src/input/*.cpp)
 CXX_SRCS += lib/glm/glm/detail/glm.cpp
+CXX_SRCS += src/input/mouse.cpp
+CXX_SRCS += src/utils/clock.cpp
 ASM_SRCS :=
 
 # Path to root of object file tree.

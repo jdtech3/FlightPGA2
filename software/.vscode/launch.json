@@ -19,7 +19,7 @@
             "debugServerArgs": "--tcpport 2334 --reset-target"
         },
         {
-            "name": "FlightGPA2: Debug (rebuild/download)",
+                                                                                                                            "name": "FlightGPA2: Debug (rebuild/download)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/FlightGPA2.elf",
