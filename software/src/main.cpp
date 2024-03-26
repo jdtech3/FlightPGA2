@@ -16,7 +16,11 @@
 #include "graphics/camera.hpp"
 #include "utils/utils.hpp"
 #include "utils/clock.hpp"
-#include "input/mouse.hpp"
+#include "utils/logging.hpp"
+
+#ifdef ENABLE_PS2_MOUSE
+    #include "input/mouse.hpp"
+#endif
 
 #include "glm/gtx/string_cast.hpp"
 
@@ -56,12 +60,12 @@ float get_fps(Display& display) {
 void sleep(double sec) { usleep(sec * 1000000.0); }
 
 int main() {
-	std::cout << "FlightGPA2 Launching!" << std::endl;
+    logging::info("FlightGPA2", "launching!");
 
     Display display(PIXEL_BUF_CTRL_BASE);
 
     glm::mat4 cam = camera(static_cast<float>(randint(0, 1000)) / 100.0f, glm::vec2(0.0f));
-    std::cout << "GLM cam matrix test: " << glm::to_string(cam) << std::endl;
+    logging::info("GLM cam matrix test", glm::to_string(cam));
 
     volatile char* char_buf_start = reinterpret_cast<volatile char*>(0x09000000);
     char local_char_buf[80] = {};
@@ -80,6 +84,8 @@ int main() {
             randint(0, PIXEL_BUF_HEIGHT - BOX_SIZE),
             (direction_t) randint(UP_LEFT, DOWN_RIGHT + 1)
         );
+
+    logging::ok("FlightGPA2", "launch complete!");
 
     while (true) {
         for (std::shared_ptr<Box>& box : boxes) {

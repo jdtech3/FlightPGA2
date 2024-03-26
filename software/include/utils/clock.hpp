@@ -5,6 +5,7 @@
 #include <nios2.h>
 
 #include "cstdint_short.hpp"
+#include "utils/logging.hpp"
 
 
 typedef struct interval_timer_reg {

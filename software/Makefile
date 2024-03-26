@@ -30,8 +30,9 @@ MAKEABLE_LIBRARY_ROOT_DIRS :=
 
 # Generic flags passed to the compiler for different types of input files.
 ALT_CFLAGS :=
-ALT_CXXFLAGS :=
-ALT_CPPFLAGS := "-std=c++14"
+ALT_CXXFLAGS := "-std=c++14"
+ALT_CXXFLAGS += "-D_GLIBCXX_USE_C99"	# hacky; for to_string only
+ALT_CPPFLAGS := 
 ALT_ASFLAGS :=
 ALT_LDFLAGS :=
 
@@ -152,6 +153,8 @@ CXX_SRCS += $(wildcard src/input/*.cpp)
 CXX_SRCS += lib/glm/glm/detail/glm.cpp
 CXX_SRCS += src/input/mouse.cpp
 CXX_SRCS += src/utils/clock.cpp
+CXX_SRCS += src/utils/adc.cpp
+CXX_SRCS += src/utils/logging.cpp
 ASM_SRCS :=
 
 # Path to root of object file tree.
