@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <sys/alt_irq.h>
 #include <nios2.h>
 

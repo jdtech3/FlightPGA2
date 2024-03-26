@@ -34,6 +34,8 @@ void init_timer_isr() {
         alt_irq_enable(INTERVAL_TIMER_2_IRQ);
     #endif
     alt_irq_cpu_enable_interrupts();
+
+    std::cout << "Timer ISR init: done" << std::endl;
 }
 
 u32 get_clock_ms() { return sys_time_ms_; }

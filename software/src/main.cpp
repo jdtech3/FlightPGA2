@@ -61,7 +61,7 @@ int main() {
     Display display(PIXEL_BUF_CTRL_BASE);
 
     glm::mat4 cam = camera(static_cast<float>(randint(0, 1000)) / 100.0f, glm::vec2(0.0f));
-    std::cout << glm::to_string(cam) << std::endl;
+    std::cout << "GLM cam matrix test: " << glm::to_string(cam) << std::endl;
 
     volatile char* char_buf_start = reinterpret_cast<volatile char*>(0x09000000);
     char local_char_buf[80] = {};
