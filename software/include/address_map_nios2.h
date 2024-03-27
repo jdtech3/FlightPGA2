@@ -5,6 +5,9 @@
 #ifndef __SYSTEM_INFO__
 #define __SYSTEM_INFO__
 
+/* CUSTOM */
+#define JTAG_2_UART_BASE        0xFF201010
+
 #define BOARD				"DE1-SoC"
 
 /* Memory */

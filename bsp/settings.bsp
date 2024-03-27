@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>18.1</BspVersion>
-        <BspGeneratedTimeStamp>Mar 25, 2024 7:38:47 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1711409927034</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Mar 27, 2024 12:39:16 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1711514356538</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/home/jdtech/FlightGPA2/bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>../fpga/Computer_System.sopcinfo</SopcDesignFile>
@@ -977,6 +977,12 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>JTAG_UART_2</slaveDescriptor>
+                <addressRange>0xFF201010 - 0xFF201017</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes>printable</attributes>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>IrDA</slaveDescriptor>
                 <addressRange>0xFF201020 - 0xFF201027</addressRange>
                 <addressSpan>8</addressSpan>
@@ -1107,6 +1113,10 @@
         <DriverPackageInfo>
                 <name>none</name>
                 <moduleName>LEDs</moduleName>
+        </DriverPackageInfo>
+        <DriverPackageInfo>
+                <name>none</name>
+                <moduleName>JTAG_UART_2</moduleName>
         </DriverPackageInfo>
         <DriverPackageInfo>
                 <name>none</name>

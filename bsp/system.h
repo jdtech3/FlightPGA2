@@ -4,7 +4,7 @@
  * Machine generated for CPU 'Nios2' in SOPC Builder design 'Computer_System'
  * SOPC Builder design path: ../fpga/Computer_System.sopcinfo
  *
- * Generated: Mon Mar 25 19:38:37 EDT 2024
+ * Generated: Wed Mar 27 00:34:01 EDT 2024
  */
 
 /*
@@ -401,6 +401,24 @@
 
 
 /*
+ * JTAG_UART_2 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_JTAG_UART_2 altera_avalon_jtag_uart
+#define JTAG_UART_2_BASE 0xff201010
+#define JTAG_UART_2_IRQ 18
+#define JTAG_UART_2_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define JTAG_UART_2_NAME "/dev/JTAG_UART_2"
+#define JTAG_UART_2_READ_DEPTH 64
+#define JTAG_UART_2_READ_THRESHOLD 8
+#define JTAG_UART_2_SPAN 8
+#define JTAG_UART_2_TYPE "altera_avalon_jtag_uart"
+#define JTAG_UART_2_WRITE_DEPTH 64
+#define JTAG_UART_2_WRITE_THRESHOLD 8
+
+
+/*
  * LEDs configuration
  *
  */
@@ -589,7 +607,7 @@
 #define SYSID_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_NAME "/dev/SysID"
 #define SYSID_SPAN 8
-#define SYSID_TIMESTAMP 1710662371
+#define SYSID_TIMESTAMP 1711513007
 #define SYSID_TYPE "altera_avalon_sysid_qsys"
 
 

@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "22";
          type = "int";
       }
    }
@@ -29,7 +29,7 @@
    {
       datum _sortIndex
       {
-         value = "20";
+         value = "21";
          type = "int";
       }
    }
@@ -45,7 +45,7 @@
    {
       datum _sortIndex
       {
-         value = "25";
+         value = "26";
          type = "int";
       }
    }
@@ -61,7 +61,7 @@
    {
       datum _sortIndex
       {
-         value = "23";
+         value = "24";
          type = "int";
       }
    }
@@ -141,7 +141,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "18";
          type = "int";
       }
    }
@@ -157,7 +157,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "19";
          type = "int";
       }
    }
@@ -173,7 +173,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "17";
          type = "int";
       }
    }
@@ -199,6 +199,27 @@
       {
          value = "1";
          type = "boolean";
+      }
+   }
+   element JTAG_UART_2
+   {
+      datum _sortIndex
+      {
+         value = "16";
+         type = "int";
+      }
+   }
+   element JTAG_UART_2.avalon_jtag_slave
+   {
+      datum _lockedAddress
+      {
+         value = "1";
+         type = "boolean";
+      }
+      datum baseAddress
+      {
+         value = "4280291344";
+         type = "String";
       }
    }
    element LEDs
@@ -301,7 +322,7 @@
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "23";
          type = "int";
       }
    }
@@ -365,7 +386,7 @@
    {
       datum _sortIndex
       {
-         value = "19";
+         value = "20";
          type = "int";
       }
    }
@@ -389,7 +410,7 @@
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "25";
          type = "int";
       }
    }
@@ -421,7 +442,7 @@
    {
       datum _sortIndex
       {
-         value = "26";
+         value = "27";
          type = "int";
       }
    }
@@ -437,7 +458,7 @@
    {
       datum _sortIndex
       {
-         value = "27";
+         value = "28";
          type = "int";
       }
    }
@@ -772,6 +793,25 @@
   <parameter name="writeBufferDepth" value="64" />
   <parameter name="writeIRQThreshold" value="8" />
  </module>
+ <module
+   name="JTAG_UART_2"
+   kind="altera_avalon_jtag_uart"
+   version="18.1"
+   enabled="1">
+  <parameter name="allowMultipleConnections" value="false" />
+  <parameter name="avalonSpec" value="2.0" />
+  <parameter name="clkFreq" value="100000000" />
+  <parameter name="hubInstanceID" value="0" />
+  <parameter name="readBufferDepth" value="64" />
+  <parameter name="readIRQThreshold" value="8" />
+  <parameter name="simInputCharacterStream" value="" />
+  <parameter name="simInteractiveOptions">NO_INTERACTIVE_WINDOWS</parameter>
+  <parameter name="useRegistersForReadBuffer" value="false" />
+  <parameter name="useRegistersForWriteBuffer" value="false" />
+  <parameter name="useRelativePathForSimFile" value="false" />
+  <parameter name="writeBufferDepth" value="64" />
+  <parameter name="writeIRQThreshold" value="8" />
+ </module>
  <module name="LEDs" kind="altera_avalon_pio" version="18.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
@@ -806,7 +846,7 @@
   <parameter name="dataAddrWidth" value="32" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='SDRAM.s1' start='0x0' end='0x4000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='Onchip_SRAM.s1' start='0x8000000' end='0x8040000' type='altera_avalon_onchip_memory2.s1' /><slave name='VGA_Subsystem_Char_Buf_Subsystem_Onchip_SRAM.s1' start='0x9000000' end='0x9002000' type='altera_avalon_onchip_memory2.s1' /><slave name='Nios2.debug_mem_slave' start='0xA000000' end='0xA000800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='LEDs.s1' start='0xFF200000' end='0xFF200010' type='altera_avalon_pio.s1' /><slave name='HEX3_HEX0.s1' start='0xFF200020' end='0xFF200030' type='altera_avalon_pio.s1' /><slave name='HEX5_HEX4.s1' start='0xFF200030' end='0xFF200040' type='altera_avalon_pio.s1' /><slave name='Slider_Switches.s1' start='0xFF200040' end='0xFF200050' type='altera_avalon_pio.s1' /><slave name='Pushbuttons.s1' start='0xFF200050' end='0xFF200060' type='altera_avalon_pio.s1' /><slave name='Expansion_JP1.s1' start='0xFF200060' end='0xFF200070' type='altera_avalon_pio.s1' /><slave name='Expansion_JP2.s1' start='0xFF200070' end='0xFF200080' type='altera_avalon_pio.s1' /><slave name='PS2_Port.avalon_ps2_slave' start='0xFF200100' end='0xFF200108' type='altera_up_avalon_ps2.avalon_ps2_slave' /><slave name='PS2_Port_Dual.avalon_ps2_slave' start='0xFF200108' end='0xFF200110' type='altera_up_avalon_ps2.avalon_ps2_slave' /><slave name='JTAG_UART.avalon_jtag_slave' start='0xFF201000' end='0xFF201008' type='altera_avalon_jtag_uart.avalon_jtag_slave' /><slave name='IrDA.avalon_irda_slave' start='0xFF201020' end='0xFF201028' type='altera_up_avalon_irda.avalon_irda_slave' /><slave name='Interval_Timer.s1' start='0xFF202000' end='0xFF202020' type='altera_avalon_timer.s1' /><slave name='Interval_Timer_2.s1' start='0xFF202020' end='0xFF202040' type='altera_avalon_timer.s1' /><slave name='SysID.control_slave' start='0xFF202040' end='0xFF202048' type='altera_avalon_sysid_qsys.control_slave' /><slave name='AV_Config.avalon_av_config_slave' start='0xFF203000' end='0xFF203010' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='VGA_Subsystem_VGA_Pixel_RGB_Resampler.avalon_rgb_slave' start='0xFF203010' end='0xFF203014' type='altera_up_avalon_video_rgb_resampler.avalon_rgb_slave' /><slave name='VGA_Subsystem_VGA_Pixel_DMA.avalon_dma_control_slave' start='0xFF203020' end='0xFF203030' type='altera_up_avalon_video_dma_controller.avalon_dma_control_slave' /><slave name='VGA_Subsystem_Char_Buf_Subsystem_Char_Buf_DMA.avalon_dma_control_slave' start='0xFF203030' end='0xFF203040' type='altera_up_avalon_video_dma_controller.avalon_dma_control_slave' /><slave name='Audio_Subsystem_Audio.avalon_audio_slave' start='0xFF203040' end='0xFF203050' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='Video_In_Subsystem_Video_In_DMA.avalon_dma_control_slave' start='0xFF203060' end='0xFF203070' type='altera_up_avalon_video_dma_controller.avalon_dma_control_slave' /><slave name='Video_In_Subsystem_Video_In_Edge_Detection_Subsystem_Edge_Detection_Router_Controller.s1' start='0xFF203070' end='0xFF203080' type='altera_avalon_pio.s1' /><slave name='ADC.adc_slave' start='0xFF204000' end='0xFF204020' type='altera_up_avalon_adc.adc_slave' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='SDRAM.s1' start='0x0' end='0x4000000' type='altera_avalon_new_sdram_controller.s1' /><slave name='Onchip_SRAM.s1' start='0x8000000' end='0x8040000' type='altera_avalon_onchip_memory2.s1' /><slave name='VGA_Subsystem_Char_Buf_Subsystem_Onchip_SRAM.s1' start='0x9000000' end='0x9002000' type='altera_avalon_onchip_memory2.s1' /><slave name='Nios2.debug_mem_slave' start='0xA000000' end='0xA000800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='LEDs.s1' start='0xFF200000' end='0xFF200010' type='altera_avalon_pio.s1' /><slave name='HEX3_HEX0.s1' start='0xFF200020' end='0xFF200030' type='altera_avalon_pio.s1' /><slave name='HEX5_HEX4.s1' start='0xFF200030' end='0xFF200040' type='altera_avalon_pio.s1' /><slave name='Slider_Switches.s1' start='0xFF200040' end='0xFF200050' type='altera_avalon_pio.s1' /><slave name='Pushbuttons.s1' start='0xFF200050' end='0xFF200060' type='altera_avalon_pio.s1' /><slave name='Expansion_JP1.s1' start='0xFF200060' end='0xFF200070' type='altera_avalon_pio.s1' /><slave name='Expansion_JP2.s1' start='0xFF200070' end='0xFF200080' type='altera_avalon_pio.s1' /><slave name='PS2_Port.avalon_ps2_slave' start='0xFF200100' end='0xFF200108' type='altera_up_avalon_ps2.avalon_ps2_slave' /><slave name='PS2_Port_Dual.avalon_ps2_slave' start='0xFF200108' end='0xFF200110' type='altera_up_avalon_ps2.avalon_ps2_slave' /><slave name='JTAG_UART.avalon_jtag_slave' start='0xFF201000' end='0xFF201008' type='altera_avalon_jtag_uart.avalon_jtag_slave' /><slave name='JTAG_UART_2.avalon_jtag_slave' start='0xFF201010' end='0xFF201018' type='altera_avalon_jtag_uart.avalon_jtag_slave' /><slave name='IrDA.avalon_irda_slave' start='0xFF201020' end='0xFF201028' type='altera_up_avalon_irda.avalon_irda_slave' /><slave name='Interval_Timer.s1' start='0xFF202000' end='0xFF202020' type='altera_avalon_timer.s1' /><slave name='Interval_Timer_2.s1' start='0xFF202020' end='0xFF202040' type='altera_avalon_timer.s1' /><slave name='SysID.control_slave' start='0xFF202040' end='0xFF202048' type='altera_avalon_sysid_qsys.control_slave' /><slave name='AV_Config.avalon_av_config_slave' start='0xFF203000' end='0xFF203010' type='altera_up_avalon_audio_and_video_config.avalon_av_config_slave' /><slave name='VGA_Subsystem_VGA_Pixel_RGB_Resampler.avalon_rgb_slave' start='0xFF203010' end='0xFF203014' type='altera_up_avalon_video_rgb_resampler.avalon_rgb_slave' /><slave name='VGA_Subsystem_VGA_Pixel_DMA.avalon_dma_control_slave' start='0xFF203020' end='0xFF203030' type='altera_up_avalon_video_dma_controller.avalon_dma_control_slave' /><slave name='VGA_Subsystem_Char_Buf_Subsystem_Char_Buf_DMA.avalon_dma_control_slave' start='0xFF203030' end='0xFF203040' type='altera_up_avalon_video_dma_controller.avalon_dma_control_slave' /><slave name='Audio_Subsystem_Audio.avalon_audio_slave' start='0xFF203040' end='0xFF203050' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='Video_In_Subsystem_Video_In_DMA.avalon_dma_control_slave' start='0xFF203060' end='0xFF203070' type='altera_up_avalon_video_dma_controller.avalon_dma_control_slave' /><slave name='Video_In_Subsystem_Video_In_Edge_Detection_Subsystem_Edge_Detection_Router_Controller.s1' start='0xFF203070' end='0xFF203080' type='altera_avalon_pio.s1' /><slave name='ADC.adc_slave' start='0xFF204000' end='0xFF204020' type='altera_up_avalon_adc.adc_slave' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -852,7 +892,7 @@
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="8395719" />
+  <parameter name="internalIrqMaskSystemInfo" value="8657863" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -1221,6 +1261,15 @@
    kind="avalon"
    version="18.1"
    start="Nios2.data_master"
+   end="JTAG_UART_2.avalon_jtag_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xff201010" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="18.1"
+   start="Nios2.data_master"
    end="PS2_Port.avalon_ps2_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0xff200100" />
@@ -1570,6 +1619,11 @@
    kind="clock"
    version="18.1"
    start="System_PLL.sys_clk"
+   end="JTAG_UART_2.clk" />
+ <connection
+   kind="clock"
+   version="18.1"
+   start="System_PLL.sys_clk"
    end="Onchip_SRAM.clk1" />
  <connection
    kind="clock"
@@ -1671,6 +1725,13 @@
    start="Nios2.irq"
    end="Interval_Timer_2.irq">
   <parameter name="irqNumber" value="2" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="18.1"
+   start="Nios2.irq"
+   end="JTAG_UART_2.irq">
+  <parameter name="irqNumber" value="18" />
  </connection>
  <connection
    kind="nios_custom_instruction"
@@ -1791,6 +1852,11 @@
    version="18.1"
    start="System_PLL.reset_source"
    end="Video_In_DMA_Addr_Translation.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="System_PLL.reset_source"
+   end="JTAG_UART_2.reset" />
  <connection
    kind="reset"
    version="18.1"

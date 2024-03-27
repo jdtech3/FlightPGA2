@@ -2,6 +2,7 @@
 // #define PROFILING_MODE
 #define GLM_ENABLE_EXPERIMENTAL
 // #define ENABLE_PS2_MOUSE
+#define ENABLE_JOYSTICK
 
 #include <iostream>
 #include <vector>
@@ -18,13 +19,17 @@
 #include "utils/clock.hpp"
 #include "utils/logging.hpp"
 
+#ifdef ENABLE_JOYSTICK
+    #include "input/uart_joystick.hpp"
+#endif
+
 #ifdef ENABLE_PS2_MOUSE
     #include "input/mouse.hpp"
 #endif
 
 #include "glm/gtx/string_cast.hpp"
 
-#define NUM_BOXES   256
+#define NUM_BOXES   16
 #define BOX_SIZE    4
 #define BOX_COLOR   0xFFFF
 #define LINE_COLOR  0x881F
@@ -77,6 +82,10 @@ int main() {
         init_mouse_isr();
     #endif
 
+    #ifdef ENABLE_JOYSTICK
+        Joystick joystick;
+    #endif
+
     std::shared_ptr<Box> boxes[NUM_BOXES];
     for (int i = 0; i < NUM_BOXES; i++)
         boxes[i] = std::make_shared<Box>(
@@ -88,6 +97,10 @@ int main() {
     logging::ok("FlightGPA2", "launch complete!");
 
     while (true) {
+        joystick.update();
+        if (display.cur_frame_id % 6 == 0)
+            logging::info("Current inputs", std::to_string(joystick.roll) + " " + std::to_string(joystick.pitch) + " " + std::to_string(joystick.throttle));
+
         for (std::shared_ptr<Box>& box : boxes) {
             if ((*box).x == 0)
                 (*box).direction = ((*box).direction == UP_LEFT) ? UP_RIGHT : DOWN_RIGHT;
@@ -121,10 +134,12 @@ int main() {
 
         for (int i = 0; i < NUM_BOXES; i++) {
             if (i != NUM_BOXES - 1)
-                display.add_display_obj(Line((*boxes[i]).x, (*boxes[i]).y, (*boxes[i-1]).x, (*boxes[i-1]).y, LINE_COLOR));
+                display.add_display_obj(Line((*boxes[i]).x, (*boxes[i]).y, (*boxes[i+1]).x, (*boxes[i+1]).y, LINE_COLOR));
 
             display.add_display_obj(Rectangle((*boxes[i]).x, (*boxes[i]).y, BOX_SIZE, BOX_SIZE, BOX_COLOR));
         }
+
+        // display.add_display_obj(Triangle(0, 0, 160, 120, 319, 0, LINE_COLOR));
 
         display.draw_frame();
 
@@ -142,8 +157,9 @@ int main() {
                     std::cout << "Mouse: [x] " << get_mouse_mm_x() << " [y] " << get_mouse_mm_y() << std::endl;
                 #endif
             #endif
-        }
 
+        }
+        
         #ifdef PROFILING_MODE
             if (display.cur_frame_id == 3600) break;
         #endif

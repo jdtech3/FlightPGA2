@@ -25,7 +25,7 @@ namespace logging {
         std::cout << context << ": " << CLEAR << msg;
         if (write_endl) std::cout << std::endl;
     }
-    
+
     void ok(std::string context, std::string msg, bool write_endl) { log_(OK, context, msg, write_endl); }
     void info(std::string context, std::string msg, bool write_endl) { log_(INFO, context, msg, write_endl); }
     void warn(std::string context, std::string msg, bool write_endl) { log_(WARNING, context, msg, write_endl); }
