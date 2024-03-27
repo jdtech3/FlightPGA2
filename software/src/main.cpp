@@ -139,7 +139,7 @@ int main() {
             display.add_display_obj(Rectangle((*boxes[i]).x, (*boxes[i]).y, BOX_SIZE, BOX_SIZE, BOX_COLOR));
         }
 
-        // display.add_display_obj(Triangle(0, 0, 160, 120, 319, 0, LINE_COLOR));
+        display.add_display_obj(Triangle(0, 0, 160, 120, 319, 0, LINE_COLOR));
 
         display.draw_frame();
 

@@ -70,27 +70,151 @@ void Rectangle::draw(u16* pixel_buf) const {
 
 // -- Triangle
 
+// static void draw_triangle_flat_bottom_(
+//     u16* pixel_buf,
+//     u16 color,
+//     int x1, int y1,
+//     int x2, int y2,
+//     int x3, int y3
+// ){
+
+//     int num_left = x2-x1; // -
+//     int den_left = y2-y1; // +
+
+//     int num_right = x3-x1; // +
+//     int den_right = y3-y1; // +
+
+//     int top = y1;
+//     int bottom = y3; // or y2
+
+//     for(int y = top; y <= bottom; ++y){
+
+//         int del_y = y-top;
+
+//         int left = x1+(del_y*num_left)/den_left;
+//         int right = x1+(del_y*num_right)/den_right;
+
+//         for(int x = left; x <= right; ++x)
+//             Pixel::draw(pixel_buf,x,y,color);
+//     }
+    
+
+// }
+
+// static void draw_triangle_flat_top_(
+//     u16* pixel_buf,
+//     u16 color,
+//     int x1, int y1,
+//     int x2, int y2,
+//     int x3, int y3
+// ){
+//     int num_left = x3-x1; // +
+//     int den_left = y3-y1; // +
+
+//     int num_right = x3-x2; // -
+//     int den_right = y3-y2; // +
+
+//     int top = y1; // or y2
+//     int bottom = y3;
+
+//     for(int y = top; y <= bottom; ++y){
+
+//         int del_y = y-top;
+
+//         int left = x1+(del_y*num_left)/den_left;
+//         int right = x2+(del_y*num_right)/den_right;
+
+//         for(int x = left; x <= right; ++x)
+//             Pixel::draw(pixel_buf,x,y,color);
+//     }
+// }
+
 Triangle::Triangle(u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 color) :
-    DisplayObject(color), x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3) {}
+    DisplayObject(color), x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3){
+
+    if(y1>y2){
+        std::swap(y1,y2);
+        std::swap(x1,x2);
+    }
+    if(y2>y3){
+        std::swap(y2,y3);
+        std::swap(x2,x3);
+        if(y1>y2){
+            std::swap(y1,y2);
+            std::swap(x1,x2);
+        }
+    }
+
+}
 
 void Triangle::draw(u16* pixel_buf) const{
-    // u16 xmin = std::min(x1, std::min(x2, x3));
-    // u16 ymin = std::min(y1, std::min(y2, y3));
-    // u16 xmax = std::max(x1, std::max(x2, x3));
-    // u16 ymax = std::max(y1, std::max(y2, y3));
 
-    // u16 dx = xmax - xmin;
-    // u16 dy = ymax - ymin;
-
-    // cross123 = ;
-    // cross213 = ;
-    // cross312 = ;
-
-    // for(u16 x = xmin; x <= xmax; x++){
-    //     for(u16 y = ymin; y <= ymax; y++){
-            
-    //     }
-    // }
+    if(y2==y3) Triangle::draw_flat_bottom(pixel_buf,color,x1,y1,x2,y2,x3,y3);
+    else if(y1==y2) Triangle::draw_flat_top(pixel_buf,color,x1,y1,x2,y2,x3,y3);
+    else{
+        int x4 = (int)x1 + ((int)(y2-y1)*(int)(x3-x1))/(int)(y3-y1);
+        int y4 = y2;
+        Triangle::draw_flat_bottom(pixel_buf,color,x1,y1,x2,y2,x4,y4);
+        Triangle::draw_flat_top(pixel_buf,color,x2,y2,x4,y4,x3,y3);
+    }
 
     return;
+}
+
+void Triangle::draw_flat_bottom(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3){
+
+    if(x2>x3){
+        std::swap(x2,x3);
+        std::swap(y2,y3);
+    }
+
+    int num_left = x2-x1; // -
+    int den_left = y2-y1; // +
+
+    int num_right = x3-x1; // +
+    int den_right = y3-y1; // +
+
+    int top = y1;
+    int bottom = y3; // or y2
+
+    for(int y = top; y <= bottom; ++y){
+
+        int del_y = y-top;
+
+        int left = x1+(del_y*num_left)/den_left;
+        int right = x1+(del_y*num_right)/den_right;
+
+        for(int x = left; x <= right; ++x)
+            Pixel::draw(pixel_buf,x,y,color);
+    }
+    
+
+}
+
+void Triangle::draw_flat_top(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3){
+
+    if(x1>x2){
+        std::swap(x1,x2);
+        std::swap(y1,y2);
+    }
+
+    int num_left = x3-x1; // +
+    int den_left = y3-y1; // +
+
+    int num_right = x3-x2; // -
+    int den_right = y3-y2; // +
+
+    int top = y1; // or y2
+    int bottom = y3;
+
+    for(int y = top; y <= bottom; ++y){
+
+        int del_y = y-top;
+
+        int left = x1+(del_y*num_left)/den_left;
+        int right = x2+(del_y*num_right)/den_right;
+
+        for(int x = left; x <= right; ++x)
+            Pixel::draw(pixel_buf,x,y,color);
+    }
 }

@@ -48,6 +48,7 @@ class Rectangle : public DisplayObject {
         u16 width, height;
 };
 
+
 class Triangle : public DisplayObject{
     public:
         Triangle(u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 color);
@@ -57,4 +58,8 @@ class Triangle : public DisplayObject{
         u16 x1, y1;
         u16 x2, y2;
         u16 x3, y3;
+        //! the last two points share the same y-coordinate
+        static void draw_flat_bottom(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3);
+        //! the first two points share the same y-coordinate
+        static void draw_flat_top(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3);
 };
