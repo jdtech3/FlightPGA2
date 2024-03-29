@@ -65,5 +65,6 @@
         "/home/jdtech/FlightGPA2/bsp/",
         "/home/jdtech/FlightGPA2/bsp/drivers/inc/"
     ],
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "liveshare.allowGuestDebugControl": true
 }

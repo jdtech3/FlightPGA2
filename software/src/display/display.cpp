@@ -9,11 +9,11 @@ Display::Display(u32 pixel_buf_controller_addr) {
     cur_frame_id = 0;
 
     // Init frame buffers
-    clear(1);
-    clear(2);
     pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(&buf1_);
     swap_buffer_blocking_();
     pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(&buf2_);
+    clear(1);
+    clear(2);
 }
 
 // -- Private methods
@@ -64,12 +64,12 @@ void Display::clear(u8 buf) {
             return;     // nop
     }
 
-    if (ERASE_COLOR == 0x0000 || ERASE_COLOR == 0xFFFF)             // optimization
-        memset(buf_to_clear, ERASE_COLOR, sizeof(*buf_to_clear));
-    else
-        for (int x = 0; x < PIXEL_BUF_WIDTH; x++)
-            for (int y = 0; y < PIXEL_BUF_HEIGHT; y++)
-                (*buf_to_clear)[x][y] = ERASE_COLOR;
+    // if (ERASE_COLOR == 0x0000 || ERASE_COLOR == 0xFFFF)             // optimization
+        // memset(buf_to_clear, ERASE_COLOR, sizeof(*buf_to_clear));
+    // else
+        for (u16 x = 0; x < PIXEL_BUF_WIDTH; x++)
+            for (u16 y = 0; y < PIXEL_BUF_HEIGHT; y++)
+                Pixel::draw(reinterpret_cast<u16*>(buf_to_clear), x, y, ERASE_COLOR);
 }
 
 void Display::draw_frame() {

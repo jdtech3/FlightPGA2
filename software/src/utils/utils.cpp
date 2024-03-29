@@ -21,3 +21,17 @@ void init_random() {
 int randint(int low, int high) {
     return (std::rand() % (high - low)) + low;
 }
+
+// FPS
+float get_fps(Display& display) {
+    static u32 prev_time;
+    static u32 prev_frame_id;
+
+    u32 cur_time = get_clock_ms();
+    float fps = static_cast<float>(display.cur_frame_id - prev_frame_id) / (static_cast<float>(cur_time - prev_time) / 1000.0f);
+
+    prev_time = cur_time;
+    prev_frame_id = display.cur_frame_id;
+
+    return fps;
+}

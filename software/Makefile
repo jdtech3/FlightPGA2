@@ -150,6 +150,7 @@ CXX_SRCS += $(wildcard src/display/*.cpp)
 CXX_SRCS += $(wildcard src/utils/*.cpp)
 CXX_SRCS += $(wildcard src/graphics/*.cpp)
 CXX_SRCS += $(wildcard src/input/*.cpp)
+CXX_SRCS += $(wildcard src/demos/*.cpp)
 ASM_SRCS :=
 
 # Path to root of object file tree.

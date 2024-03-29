@@ -14,6 +14,9 @@ void Pixel::draw(u16* pixel_buf) const {
 }
 
 void Pixel::draw(u16* pixel_buf, u16 x, u16 y, u16 color) {     // static
+    // NOTE: move this check to display object level if "performance is getting hairy"
+    if (x < 0 || x >= PIXEL_BUF_HEIGHT || y < 0 || y >= PIXEL_BUF_WIDTH) return;
+
     auto pixel_addr = reinterpret_cast<u16*>(reinterpret_cast<int>(pixel_buf) + (static_cast<int>(y) << 10) + (static_cast<int>(x) << 1));
     *pixel_addr = color;
 }
@@ -132,16 +135,16 @@ void Rectangle::draw(u16* pixel_buf) const {
 Triangle::Triangle(u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 color) :
     DisplayObject(color), x1(x1), y1(y1), x2(x2), y2(y2), x3(x3), y3(y3){
 
-    if(y1>y2){
-        std::swap(y1,y2);
-        std::swap(x1,x2);
+    if(this->y1 > this->y2){
+        std::swap(this->y1,this->y2);
+        std::swap(this->x1,this->x2);
     }
-    if(y2>y3){
-        std::swap(y2,y3);
-        std::swap(x2,x3);
-        if(y1>y2){
-            std::swap(y1,y2);
-            std::swap(x1,x2);
+    if(this->y2 > this->y3){
+        std::swap(this->y2,this->y3);
+        std::swap(this->x2,this->x3);
+        if(this->y1 > this->y2){
+            std::swap(this->y1,this->y2);
+            std::swap(this->x1,this->x2);
         }
     }
 
@@ -176,6 +179,8 @@ void Triangle::draw_flat_bottom(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x
 
     int top = y1;
     int bottom = y3; // or y2
+
+    if (den_left == 0 || den_right == 0) return;    // just in case we get div/0
 
     for(int y = top; y <= bottom; ++y){
 
@@ -217,4 +222,9 @@ void Triangle::draw_flat_top(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x2, 
         for(int x = left; x <= right; ++x)
             Pixel::draw(pixel_buf,x,y,color);
     }
+}
+
+std::ostream& operator<<(std::ostream& os, const Triangle& tri) {
+    os << "Triangle: [(" << tri.x1 << "," << tri.y1 << "), " << tri.x2 << "," << tri.y2 << "), " << tri.x3 << "," << tri.y3 << ")]";
+    return os;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <ostream>
 
 #include "constants.h"
 #include "cstdint_short.hpp"
@@ -53,6 +54,7 @@ class Triangle : public DisplayObject{
     public:
         Triangle(u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 color);
         void draw(u16* pixel_buf) const;
+        friend std::ostream& operator<<(std::ostream& os, const Triangle& tri);
 
     private:
         u16 x1, y1;
