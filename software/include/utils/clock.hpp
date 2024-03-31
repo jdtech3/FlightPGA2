@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <chrono>
 #include <sys/alt_irq.h>
 #include <nios2.h>
 

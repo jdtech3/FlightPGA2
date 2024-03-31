@@ -24,7 +24,7 @@ void init_timer_isr() {
     // Support both enhanced and legacy APIs
     #ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT
         alt_ic_isr_register(
-            INTERVAL_TIMER_2_IRQ_INTERRUPT_CONTROLLER_ID, 
+            INTERVAL_TIMER_2_IRQ_INTERRUPT_CONTROLLER_ID,
             INTERVAL_TIMER_2_IRQ,
             &timer_isr_, &sys_time_ms_, 0
         );

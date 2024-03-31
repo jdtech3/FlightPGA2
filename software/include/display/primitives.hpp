@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <ostream>
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
 
 #include "constants.h"
 #include "cstdint_short.hpp"
@@ -18,50 +20,52 @@ class DisplayObject {
 
 class Pixel : public DisplayObject {
     public:
-        Pixel(u16 x, u16 y, u16 color);
+        Pixel(i16 x, i16 y, u16 color);
         void draw(u16* pixel_buf) const;
 
         // Static helper method for other classes to use to reduce overhead
-        static void draw(u16* pixel_buf, u16 x, u16 y, u16 color);
+        static void draw(u16* pixel_buf, i16 x, i16 y, u16 color);
 
     private:
-        u16 x;
-        u16 y;
+        i16 x;
+        i16 y;
 };
 
 class Line : public DisplayObject {
     public:
-        Line(u16 x1, u16 y1, u16 x2, u16 y2, u16 color);
+        Line(i16 x1, i16 y1, i16 x2, i16 y2, u16 color);
         void draw(u16* pixel_buf) const;
 
     private:
-        u16 x1, y1;
-        u16 x2, y2;
+        i16 x1, y1;
+        i16 x2, y2;
 };
 
 class Rectangle : public DisplayObject {
     public:
-        Rectangle(u16 x, u16 y, u16 width, u16 height, u16 color);
+        Rectangle(i16 x, i16 y, i16 width, i16 height, u16 color);
         void draw(u16* pixel_buf) const;
 
     private:
-        u16 x, y;
-        u16 width, height;
+        i16 x, y;
+        i16 width, height;
 };
 
 
 class Triangle : public DisplayObject{
     public:
-        Triangle(u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3, u16 color);
+        Triangle(i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3, u16 color);
+        Triangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color);
+        Triangle(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color);
         void draw(u16* pixel_buf) const;
         friend std::ostream& operator<<(std::ostream& os, const Triangle& tri);
 
     private:
-        u16 x1, y1;
-        u16 x2, y2;
-        u16 x3, y3;
+        i16 x1, y1;
+        i16 x2, y2;
+        i16 x3, y3;
         //! the last two points share the same y-coordinate
-        static void draw_flat_bottom(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3);
+        static void draw_flat_bottom(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3);
         //! the first two points share the same y-coordinate
-        static void draw_flat_top(u16* pixel_buf, u16 color, u16 x1, u16 y1, u16 x2, u16 y2, u16 x3, u16 y3);
+        static void draw_flat_top(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3);
 };
