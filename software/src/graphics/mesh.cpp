@@ -24,26 +24,29 @@ void Mesh::add_to_frame(Display& display, const glm::mat4& model, const glm::mat
         world_normals.emplace_back(model*glm::vec4(vertex,0.f));
 
     for(int i = 0; i < world_normals.size(); i++){
+
         auto normal = world_normals[i];
-        if(glm::dot(normal, camera_dir) <= 0.f){
-            float ambient = 0.15f;
-            float spec_light = 0.01f;
 
-            float diffuse = 0.1*glm::dot(normal,-light_dir);
-            diffuse = max(diffuse, 0.f);
+        // back face culling
+        if(glm::dot(normal, camera_dir) > 0.f) continue;
 
-            glm::vec3 view_dir = glm::normalize(camera_pos-center);
-            glm::vec3 refl_dir = glm::reflect(light_dir, normal);
-            float specular = glm::dot(view_dir,refl_dir);
-            specular = max(specular, 0.f);
-            specular = glm::pow(specular, 4);
-            specular *= spec_light;
+        float ambient = 0.15f;
+        float spec_light = 0.01f;
 
-            u16 face_color = Mesh::multiply_color(face_colors[i], diffuse+ambient);
+        float diffuse = 0.1*glm::dot(normal,-light_dir);
+        diffuse = max(diffuse, 0.f);
 
-            int j = i*3;
-            display.add_display_obj(Triangle(after_mvp[faces[j]], after_mvp[faces[j+1]], after_mvp[faces[j+2]], face_color));
-        }
+        glm::vec3 view_dir = glm::normalize(camera_pos-center);
+        glm::vec3 refl_dir = glm::reflect(light_dir, normal);
+        float specular = glm::dot(view_dir,refl_dir);
+        specular = max(specular, 0.f);
+        specular = glm::pow(specular, 4);
+        specular *= spec_light;
+
+        u16 face_color = Mesh::multiply_color(face_colors[i], diffuse+ambient);
+
+        int j = i*3;
+        display.add_display_obj(Triangle(after_mvp[faces[j]], after_mvp[faces[j+1]], after_mvp[faces[j+2]], face_color));
     }
 }
 
