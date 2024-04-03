@@ -9,9 +9,9 @@ Display::Display(u32 pixel_buf_controller_addr) {
     cur_frame_id = 0;
 
     // Init frame buffers
-    pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(&buf1_);
+    pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(buf1_);
     swap_buffer_blocking_();
-    pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(&buf2_);
+    pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(buf2_);
     clear(1);
     clear(2);
 }
@@ -74,13 +74,11 @@ void Display::clear(u8 buf) {
 
 void Display::draw_frame() {
     erase_last_frame_();
-    // clear();
     draw_current_frame_();
-    // display_objs_.clear();
-    // display_objs_.shrink_to_fit();
     swap_buffer_blocking_();
     cur_frame_id++;
 
+    // TODO: update this to add triangles + use logging utils + make this #ifdef DEBUG
     // if ((cur_frame_id % 60) == 0) {
     //     u32 lines = 0;
     //     u32 rects = 0;
@@ -94,5 +92,4 @@ void Display::draw_frame() {
     //               << "Lines in buffer: " << lines << "\n"
     //               << "Rectangles in buffer: " << rects << "\n" << std::endl;
     // }
-
 }

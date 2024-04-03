@@ -3,11 +3,11 @@
 #include <deque>
 #include <cstring>  // for memset
 #include <memory>   // for smart pointers
-#include <iostream>
 
 #include "constants.h"
 #include "cstdint_short.hpp"
-#include "primitives.hpp"
+#include "display/primitives.hpp"
+#include "utils/logging.hpp"
 
 
 typedef struct pixel_buffer_controller {
