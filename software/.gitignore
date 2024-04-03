@@ -8,3 +8,6 @@ obj/
 
 # Other outputs
 *.out
+
+# Hardcoded meshes
+show_object_mesh.cpp

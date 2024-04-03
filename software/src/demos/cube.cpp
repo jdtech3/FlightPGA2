@@ -42,22 +42,7 @@ int cube(){
     Display display(PIXEL_BUF_CTRL_BASE);
     // display.clear();
 
-    // const std::array<Triangle3D, 2*6> cube_vertices{ // 2 tirangles per face * 6 faces per cube
-    //     Triangle3D(glm::vec3(-.5f,-.5f,-.5f),glm::vec3(-.5f,+.5f,-.5f),glm::vec3(+.5f,-.5f,-.5f),0xF800), // back face
-    //     Triangle3D(glm::vec3(+.5f,+.5f,-.5f),glm::vec3(-.5f,+.5f,-.5f),glm::vec3(+.5f,-.5f,-.5f),0xF800), // ^
-    //     Triangle3D(glm::vec3(-.5f,-.5f,-.5f),glm::vec3(+.5f,-.5f,-.5f),glm::vec3(+.5f,-.5f,+.5f),0x07E0), // bottom face
-    //     Triangle3D(glm::vec3(-.5f,-.5f,-.5f),glm::vec3(-.5f,-.5f,+.5f),glm::vec3(+.5f,-.5f,+.5f),0x07E0), // ^
-    //     Triangle3D(glm::vec3(+.5f,+.5f,+.5f),glm::vec3(-.5f,+.5f,+.5f),glm::vec3(+.5f,-.5f,+.5f),0xF800), // front face
-    //     Triangle3D(glm::vec3(-.5f,-.5f,+.5f),glm::vec3(-.5f,+.5f,+.5f),glm::vec3(+.5f,-.5f,+.5f),0xF800), // ^
-    //     Triangle3D(glm::vec3(-.5f,+.5f,-.5f),glm::vec3(+.5f,+.5f,-.5f),glm::vec3(+.5f,+.5f,+.5f),0x07E0), // top face
-    //     Triangle3D(glm::vec3(-.5f,+.5f,-.5f),glm::vec3(-.5f,+.5f,+.5f),glm::vec3(+.5f,+.5f,+.5f),0x07E0), // ^
-    //     Triangle3D(glm::vec3(-.5f,-.5f,-.5f),glm::vec3(-.5f,+.5f,-.5f),glm::vec3(-.5f,-.5f,+.5f),0x001F), // left face
-    //     Triangle3D(glm::vec3(-.5f,+.5f,+.5f),glm::vec3(-.5f,+.5f,-.5f),glm::vec3(-.5f,-.5f,+.5f),0x001F), // ^
-    //     Triangle3D(glm::vec3(+.5f,-.5f,-.5f),glm::vec3(+.5f,+.5f,-.5f),glm::vec3(+.5f,-.5f,+.5f),0x001F), // right face
-    //     Triangle3D(glm::vec3(+.5f,+.5f,+.5f),glm::vec3(+.5f,+.5f,-.5f),glm::vec3(+.5f,-.5f,+.5f),0x001F), // ^
-    // };
-
-    Mesh cube_mesh(
+    const Mesh cube_mesh(
         glm::vec3(0,0,0),
         {
             glm::vec3(-.5f,-.5f,-.5f), 
@@ -118,36 +103,6 @@ int cube(){
         spin += rot_speed;
         auto mat_model = glm::rotate(glm::radians(angle),glm::vec3(0,1,0))
                        * glm::rotate(glm::radians(spin),glm::vec3(1,1,1));
-        // auto mat_mvp = mat_vp*mat_model;
-
-        // std::vector<Quad3D> after_mvp;
-        // for(const auto& quad : cube_vertices){
-        //     after_mvp.emplace_back(
-        //         mat_mvp*glm::vec4(quad.v1,1.f),
-        //         mat_mvp*glm::vec4(quad.v2,1.f),
-        //         mat_mvp*glm::vec4(quad.v3,1.f),
-        //         mat_mvp*glm::vec4(quad.v4,1.f),  
-        //         quad.color
-        //     );
-        // }
-        // std::sort(after_mvp.begin(), after_mvp.end(), Quad3D::sort_depth_);
-        // for(const auto& quad : after_mvp){
-        //     quad.draw(display);
-        // }
-        // std::vector<glm::vec3> after_mvp;
-        // for(const glm::vec3& vertex : cube_mesh.vertices)
-        //     after_mvp.emplace_back(mat_mvp*glm::vec4(vertex,1.f));
-        
-        // std::vector<glm::vec3> after_mvp_normals;
-        // for(const glm::vec3& vertex : cube_mesh.face_normals)
-        //     after_mvp_normals.emplace_back(mat_mvp*glm::vec4(vertex,0.f));
-    
-        // for(int i = 0; i < after_mvp_normals.size(); i++){
-        //     if(glm::dot(after_mvp_normals[i], glm::vec3(0,0,-1)) > 0){
-        //         int j = i*3;
-        //         display.add_display_obj(Triangle(after_mvp[cube_mesh.faces[j]], after_mvp[cube_mesh.faces[j+1]], after_mvp[cube_mesh.faces[j+2]], cube_mesh.face_colors[i]));
-        //     }
-        // }
 
         cube_mesh.add_to_frame(display, mat_model, mat_vp, glm::vec3(0, 0, -1), glm::vec3(0, 0, 5), glm::vec3(0, -1, 0));
 
