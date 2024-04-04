@@ -15,7 +15,7 @@ void Pixel::draw(u16* pixel_buf) const {
 
 void Pixel::draw(u16* pixel_buf, i16 x, i16 y, u16 color) {     // static
     // NOTE: move this check to display object level if "performance is getting hairy"
-    if (x < 0 || x >= PIXEL_BUF_HEIGHT || y < 0 || y >= PIXEL_BUF_WIDTH) return;
+    if (x < 0 || x >= constants::PIXEL_BUF_WIDTH || y < 0 || y >= constants::PIXEL_BUF_HEIGHT) return;
 
     auto pixel_addr = reinterpret_cast<u16*>(reinterpret_cast<int>(pixel_buf) + (static_cast<int>(y) << 10) + (static_cast<int>(x) << 1));
     *pixel_addr = color;
@@ -92,13 +92,20 @@ Triangle::Triangle(i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3, u16 color) :
 
 }
 
-Triangle::Triangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color):
+#define x_scale (static_cast<float>(constants::PIXEL_BUF_WIDTH)/2.f)    // cleans up code
+#define y_scale (static_cast<float>(constants::PIXEL_BUF_HEIGHT)/2.f)
+
+Triangle::Triangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color) :
     Triangle(
-        static_cast<i16>((PIXEL_BUF_WIDTH/2.f)*v1.x/v1.z + PIXEL_BUF_WIDTH/2.f), static_cast<i16>((-PIXEL_BUF_HEIGHT/2.f)*v1.y/v1.z + PIXEL_BUF_HEIGHT/2.f),
-        static_cast<i16>((PIXEL_BUF_WIDTH/2.f)*v2.x/v2.z + PIXEL_BUF_WIDTH/2.f), static_cast<i16>((-PIXEL_BUF_HEIGHT/2.f)*v2.y/v2.z + PIXEL_BUF_HEIGHT/2.f),
-        static_cast<i16>((PIXEL_BUF_WIDTH/2.f)*v3.x/v3.z + PIXEL_BUF_WIDTH/2.f), static_cast<i16>((-PIXEL_BUF_HEIGHT/2.f)*v3.y/v3.z + PIXEL_BUF_HEIGHT/2.f),
+        static_cast<i16>(x_scale*v1.x/v1.z + x_scale), static_cast<i16>(-y_scale*v1.y/v1.z + y_scale),
+        static_cast<i16>(x_scale*v2.x/v2.z + x_scale), static_cast<i16>(-y_scale*v2.y/v2.z + y_scale),
+        static_cast<i16>(x_scale*v3.x/v3.z + x_scale), static_cast<i16>(-y_scale*v3.y/v3.z + y_scale),
         color
-    ){}
+    )
+{}
+
+#undef x_scale
+#undef y_scale
 
 Triangle::Triangle(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color):
     Triangle(glm::vec3(v1), glm::vec3(v2), glm::vec3(v3), color){}

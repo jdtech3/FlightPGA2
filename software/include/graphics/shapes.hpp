@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cstdint_short.hpp"
 #include "display/display.hpp"
 

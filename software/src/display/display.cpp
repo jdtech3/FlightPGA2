@@ -32,7 +32,7 @@ void Display::erase_last_frame_() {
     if (cur_frame_id < 2) return;     // no need to erase anything on first 2 frames
 
     while (display_objs_.front()->frame_id == cur_frame_id - 2) {
-        display_objs_.front()->color = ERASE_COLOR;
+        display_objs_.front()->color = constants::ERASE_COLOR;
         display_objs_.front()->draw(current_pixel_buf_);
         display_objs_.pop_front();
     }
@@ -47,12 +47,12 @@ void Display::swap_buffer_blocking_() {
 // -- Public methods
 
 void Display::clear(u8 buf) {
-    u16 (*buf_to_clear)[PIXEL_BUF_HEIGHT][512];
+    u16 (*buf_to_clear)[constants::PIXEL_BUF_HEIGHT][512];
 
     switch (buf) {
         case 0:
             // This is fairly unsafe, but hardware should guarantee pixel buf pointer points to one of the bufs
-            buf_to_clear = reinterpret_cast<u16 (*)[PIXEL_BUF_HEIGHT][512]>(current_pixel_buf_);
+            buf_to_clear = reinterpret_cast<u16 (*)[constants::PIXEL_BUF_HEIGHT][512]>(current_pixel_buf_);
             break;
         case 1:
             buf_to_clear = &buf1_;
@@ -64,12 +64,12 @@ void Display::clear(u8 buf) {
             return;     // nop
     }
 
-    // if (ERASE_COLOR == 0x0000 || ERASE_COLOR == 0xFFFF)             // optimization
-        // memset(buf_to_clear, ERASE_COLOR, sizeof(*buf_to_clear));
+    // if (constants::ERASE_COLOR == 0x0000 || constants::ERASE_COLOR == 0xFFFF)             // optimization
+        // memset(buf_to_clear, constants::ERASE_COLOR, sizeof(*buf_to_clear));
     // else
-        for (u16 x = 0; x < PIXEL_BUF_WIDTH; x++)
-            for (u16 y = 0; y < PIXEL_BUF_HEIGHT; y++)
-                Pixel::draw(reinterpret_cast<u16*>(buf_to_clear), x, y, ERASE_COLOR);
+        for (u16 x = 0; x < constants::PIXEL_BUF_WIDTH; x++)
+            for (u16 y = 0; y < constants::PIXEL_BUF_HEIGHT; y++)
+                Pixel::draw(reinterpret_cast<u16*>(buf_to_clear), x, y, constants::ERASE_COLOR);
 }
 
 void Display::draw_frame() {

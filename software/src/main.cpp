@@ -1,5 +1,5 @@
 #include "demos/demos.hpp"
 
 int main() {
-    return boxes();
+    return show_object();
 }

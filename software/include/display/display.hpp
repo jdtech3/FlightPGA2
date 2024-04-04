@@ -4,7 +4,7 @@
 #include <cstring>  // for memset
 #include <memory>   // for smart pointers
 
-#include "constants.h"
+#include "constants.hpp"
 #include "cstdint_short.hpp"
 #include "display/primitives.hpp"
 #include "utils/logging.hpp"
@@ -22,8 +22,8 @@ class Display {
     private:
         volatile pixel_buf_controller_t* pixel_buf_controller_;
         u16* current_pixel_buf_;
-        u16 buf1_[PIXEL_BUF_HEIGHT][512];   // 512 needed for padding (?)
-        u16 buf2_[PIXEL_BUF_HEIGHT][512];
+        u16 buf1_[constants::PIXEL_BUF_HEIGHT][512];   // 512 needed for padding (?)
+        u16 buf2_[constants::PIXEL_BUF_HEIGHT][512];
 
         void draw_current_frame_();
         void erase_last_frame_();

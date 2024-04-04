@@ -2,7 +2,7 @@
 #include "demos/demos.hpp"
 
 #include "address_map_nios2.h"
-#include "constants.h"
+#include "constants.hpp"
 #include "display/display.hpp"
 #include "display/primitives.hpp"
 #include "graphics/shapes.hpp"
@@ -26,7 +26,6 @@ int show_object(){
 
     logging::info("ShowObject", "launching!");
     Display display(PIXEL_BUF_CTRL_BASE);
-    // display.clear();
 
     int camera_distance = 15;
 

@@ -12,7 +12,7 @@
 #include <unistd.h>
 
 #include "address_map_nios2.h"
-#include "constants.h"
+#include "constants.hpp"
 #include "display/display.hpp"
 #include "display/primitives.hpp"
 #include "graphics/camera.hpp"
@@ -79,8 +79,8 @@ int boxes() {
     std::shared_ptr<Box> boxes[NUM_BOXES];
     for (int i = 0; i < NUM_BOXES; i++)
         boxes[i] = std::make_shared<Box>(
-            randint(0, PIXEL_BUF_WIDTH - BOX_SIZE),
-            randint(0, PIXEL_BUF_HEIGHT - BOX_SIZE),
+            randint(0, constants::PIXEL_BUF_WIDTH - BOX_SIZE),
+            randint(0, constants::PIXEL_BUF_HEIGHT - BOX_SIZE),
             (direction_t) randint(UP_LEFT, DOWN_RIGHT + 1)
         );
 
@@ -95,12 +95,12 @@ int boxes() {
         for (std::shared_ptr<Box>& box : boxes) {
             if ((*box).x == 0)
                 (*box).direction = ((*box).direction == UP_LEFT) ? UP_RIGHT : DOWN_RIGHT;
-            else if ((*box).x + BOX_SIZE == PIXEL_BUF_WIDTH - 1)
+            else if ((*box).x + BOX_SIZE == constants::PIXEL_BUF_WIDTH - 1)
                 (*box).direction = ((*box).direction == UP_RIGHT) ? UP_LEFT : DOWN_LEFT;
 
             if ((*box).y == 0) 
                 (*box).direction = ((*box).direction == UP_LEFT) ? DOWN_LEFT : DOWN_RIGHT;
-            else if ((*box).y + BOX_SIZE == PIXEL_BUF_HEIGHT - 1)
+            else if ((*box).y + BOX_SIZE == constants::PIXEL_BUF_HEIGHT - 1)
                 (*box).direction = ((*box).direction == DOWN_LEFT) ? UP_LEFT : UP_RIGHT;
 
             switch ((*box).direction) {
