@@ -23,8 +23,8 @@ def main():
     args.outfile.write('#include "graphics/mesh.hpp"\n\n')
 
     var_name = Path(args.outfile.name).stem
-    args.outfile.write('Mesh ' + var_name + ' = {\n')
     args.outfile.write('extern Mesh ' + var_name + ';\n\n')
+    args.outfile.write('Mesh ' + var_name + ' = {\n')
 
     center_mass_cs = ', '.join([str(x) for x in mesh.center_mass])
     args.outfile.write('    glm::vec3(' + center_mass_cs + '),\n');
