@@ -151,6 +151,7 @@ CXX_SRCS += $(wildcard src/utils/*.cpp)
 CXX_SRCS += $(wildcard src/graphics/*.cpp)
 CXX_SRCS += $(wildcard src/input/*.cpp)
 CXX_SRCS += $(wildcard src/demos/*.cpp)
+CXX_SRCS += $(wildcard src/game/*.cpp)
 ASM_SRCS :=
 
 # Path to root of object file tree.
@@ -168,7 +169,7 @@ CREATE_LINKER_MAP := 1
 # Common arguments for ALT_CFLAGSs
 APP_CFLAGS_DEFINED_SYMBOLS :=
 APP_CFLAGS_UNDEFINED_SYMBOLS :=
-APP_CFLAGS_OPTIMIZATION := -O1
+APP_CFLAGS_OPTIMIZATION := -O3
 APP_CFLAGS_DEBUG_LEVEL := -g
 APP_CFLAGS_WARNINGS := -Wall
 APP_CFLAGS_USER_FLAGS :=

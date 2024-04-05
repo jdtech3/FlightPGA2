@@ -20,4 +20,5 @@ typedef struct interval_timer_reg {
 
 void init_timer_isr();
 u32 get_clock_ms();
+float get_clock_s();
 void reset_clock_ms();

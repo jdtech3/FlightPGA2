@@ -39,4 +39,5 @@ void init_timer_isr() {
 }
 
 u32 get_clock_ms() { return sys_time_ms_; }
+float get_clock_s() { return static_cast<float>(sys_time_ms_) / 1000.f; }
 void reset_clock_ms() { sys_time_ms_ = 0; }
