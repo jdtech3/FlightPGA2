@@ -27,6 +27,7 @@ class Display {
 
         void draw_current_frame_();
         void erase_last_frame_();
+        void swap_buffer_();
         void swap_buffer_blocking_();
 
     public:
@@ -34,9 +35,10 @@ class Display {
         std::deque<std::unique_ptr<DisplayObject>> display_objs_;
 
         Display(u32 pixel_buf_controller_addr);
+
+        inline bool swapping_buffer() { return (pixel_buf_controller_->status & 0b1) != 0; }
         void clear(u8 buf = 0);
         void draw_frame();
-        // void add_display_obj(std::unique_ptr<DisplayObject> display_obj);
 
         template <class T>
         void add_display_obj(T&& display_obj) {

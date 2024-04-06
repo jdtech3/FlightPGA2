@@ -55,10 +55,13 @@ class Rectangle : public DisplayObject {
 class Triangle : public DisplayObject{
     public:
         Triangle(i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3, u16 color);
-        Triangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color);
+        // Triangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color);
         Triangle(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color);
         void draw(u16* pixel_buf) const;
         friend std::ostream& operator<<(std::ostream& os, const Triangle& tri);
+
+        // static Triangle from3D(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color);
+        // static Triangle from3D(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color);
 
     private:
         i16 x1, y1;

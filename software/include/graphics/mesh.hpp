@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "cstdint_short.hpp"
+#include "constants.hpp"
 #include "display/display.hpp"
 
 class Mesh{

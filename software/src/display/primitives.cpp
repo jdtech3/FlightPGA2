@@ -1,5 +1,8 @@
 #include "display/primitives.hpp"
 
+#define max(a,b) (a > b ? a : b)
+#define min(a,b) (a < b ? a : b)
+
 // -- DisplayObject
 
 DisplayObject::DisplayObject(u16 color): color(color), frame_id(-1) {}
@@ -15,7 +18,7 @@ void Pixel::draw(u16* pixel_buf) const {
 
 void Pixel::draw(u16* pixel_buf, i16 x, i16 y, u16 color) {     // static
     // NOTE: move this check to display object level if "performance is getting hairy"
-    if (x < 0 || x >= constants::PIXEL_BUF_WIDTH || y < 0 || y >= constants::PIXEL_BUF_HEIGHT) return;
+    if (x < 0 || x >= static_cast<i16>(constants::PIXEL_BUF_WIDTH) || y < 0 || y >= static_cast<i16>(constants::PIXEL_BUF_HEIGHT)) return;
 
     auto pixel_addr = reinterpret_cast<u16*>(reinterpret_cast<int>(pixel_buf) + (static_cast<int>(y) << 10) + (static_cast<int>(x) << 1));
     *pixel_addr = color;
@@ -95,20 +98,57 @@ Triangle::Triangle(i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3, u16 color) :
 #define x_scale (static_cast<float>(constants::PIXEL_BUF_WIDTH)/2.f)    // cleans up code
 #define y_scale (static_cast<float>(constants::PIXEL_BUF_HEIGHT)/2.f)
 
-Triangle::Triangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color) :
+// Triangle::Triangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color) :
+//     Triangle(
+//         static_cast<i16>(x_scale*v1.x/fabsf(v1.z) + x_scale), static_cast<i16>(-y_scale*v1.y/fabsf(v1.z) + y_scale),
+//         static_cast<i16>(x_scale*v2.x/fabsf(v2.z) + x_scale), static_cast<i16>(-y_scale*v2.y/fabsf(v2.z) + y_scale),
+//         static_cast<i16>(x_scale*v3.x/fabsf(v3.z) + x_scale), static_cast<i16>(-y_scale*v3.y/fabsf(v3.z) + y_scale),
+//         color
+//     )
+// {}
+
+Triangle::Triangle(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color) :
     Triangle(
-        static_cast<i16>(x_scale*v1.x/v1.z + x_scale), static_cast<i16>(-y_scale*v1.y/v1.z + y_scale),
-        static_cast<i16>(x_scale*v2.x/v2.z + x_scale), static_cast<i16>(-y_scale*v2.y/v2.z + y_scale),
-        static_cast<i16>(x_scale*v3.x/v3.z + x_scale), static_cast<i16>(-y_scale*v3.y/v3.z + y_scale),
+        static_cast<i16>(x_scale*v1.x/v1.w + x_scale), static_cast<i16>(-y_scale*v1.y/v1.w + y_scale),
+        static_cast<i16>(x_scale*v2.x/v2.w + x_scale), static_cast<i16>(-y_scale*v2.y/v2.w + y_scale),
+        static_cast<i16>(x_scale*v3.x/v3.w + x_scale), static_cast<i16>(-y_scale*v3.y/v3.w + y_scale),
         color
     )
 {}
 
+// #define clamp_x(x) min(max(x, 0), constants::PIXEL_BUF_WIDTH)
+// #define clamp_y(y) min(max(y, 0), constants::PIXEL_BUF_HEIGHT)
+
+// Triangle Triangle::from3D(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, u16 color){
+
+//     float x1 = x_scale*v1.x/fabsf(v1.z) + x_scale, y1 = -y_scale*v1.y/fabsf(v1.z) + y_scale;
+//     float x2 = x_scale*v2.x/fabsf(v2.z) + x_scale, y2 = -y_scale*v2.y/fabsf(v2.z) + y_scale;
+//     float x3 = x_scale*v3.x/fabsf(v3.z) + x_scale, y3 = -y_scale*v3.y/fabsf(v3.z) + y_scale;
+    
+//     // x1 = clamp_x(x1); y1 = clamp_y(y1);
+//     // x2 = clamp_x(x2); y2 = clamp_y(y2);
+//     // x3 = clamp_x(x3); y3 = clamp_y(y3);
+
+//     return Triangle(
+//         static_cast<i16>(x1), static_cast<i16>(y1),
+//         static_cast<i16>(x2), static_cast<i16>(y2),
+//         static_cast<i16>(x3), static_cast<i16>(y3),
+//         color
+//     );
+// }
+
+// #undef clamp_x
+// #undef clamp_y
+
 #undef x_scale
 #undef y_scale
 
-Triangle::Triangle(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color):
-    Triangle(glm::vec3(v1), glm::vec3(v2), glm::vec3(v3), color){}
+// Triangle::Triangle(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color):
+//     Triangle(glm::vec3(v1), glm::vec3(v2), glm::vec3(v3), color){}
+
+// Triangle Triangle::from3D(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& v3, u16 color){
+//     return Triangle::from3D(glm::vec3(v1), glm::vec3(v2), glm::vec3(v3), color);
+// }
 
 void Triangle::draw(u16* pixel_buf) const{
 
@@ -137,19 +177,25 @@ void Triangle::draw_flat_bottom(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x
     int num_right = x3-x1; // +
     int den_right = y3-y1; // +
 
+    if (den_left == 0 || den_right == 0) return;    // just in case we get div/0
+
     int top = y1;
     int bottom = y3; // or y2
 
-    if (den_left == 0 || den_right == 0) return;    // just in case we get div/0
+    int y_min = max(top, 0);
+    int y_max = min(bottom, static_cast<int>(constants::PIXEL_BUF_HEIGHT));
 
-    for(int y = top; y <= bottom; ++y){
+    for(int y = y_min; y <= y_max; ++y){
 
         int del_y = y-top;
 
         int left = x1+(del_y*num_left)/den_left;
         int right = x1+(del_y*num_right)/den_right;
 
-        for(int x = left; x <= right; ++x)
+        int x_min = max(left, 0);
+        int x_max = min(right, static_cast<int>(constants::PIXEL_BUF_WIDTH));
+
+        for(int x = x_min; x <= x_max; ++x)
             Pixel::draw(pixel_buf,x,y,color);
     }
     
@@ -172,19 +218,30 @@ void Triangle::draw_flat_top(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x2, 
     int top = y1; // or y2
     int bottom = y3;
 
-    for(int y = top; y <= bottom; ++y){
+    int y_min = max(top, 0);
+    int y_max = min(bottom, static_cast<int>(constants::PIXEL_BUF_HEIGHT));
+
+    for(int y = y_min; y <= y_max; ++y){
 
         int del_y = y-top;
 
         int left = x1+(del_y*num_left)/den_left;
         int right = x2+(del_y*num_right)/den_right;
 
-        for(int x = left; x <= right; ++x)
+        int x_min = max(left, 0);
+        int x_max = min(right, static_cast<int>(constants::PIXEL_BUF_WIDTH));
+
+        for(int x = x_min; x <= x_max; ++x)
             Pixel::draw(pixel_buf,x,y,color);
     }
+
 }
 
 std::ostream& operator<<(std::ostream& os, const Triangle& tri) {
     os << "Triangle: [(" << tri.x1 << "," << tri.y1 << "), " << tri.x2 << "," << tri.y2 << "), " << tri.x3 << "," << tri.y3 << ")]";
     return os;
 }
+
+
+#undef min
+#undef max

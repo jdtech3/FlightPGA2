@@ -39,8 +39,13 @@ void Display::erase_last_frame_() {
 }
 
 void Display::swap_buffer_blocking_() {
-    pixel_buf_controller_->buffer = 1;                      // cause buf swap
-    while ((pixel_buf_controller_->status & 0b1) != 0);     // block until done
+    pixel_buf_controller_->buffer = 1;      // cause buf swap
+    while (swapping_buffer());              // block until done
+    current_pixel_buf_ = reinterpret_cast<u16*>(pixel_buf_controller_->back_buffer);
+}
+
+void Display::swap_buffer_() {
+    pixel_buf_controller_->buffer = 1;      // cause buf swap
     current_pixel_buf_ = reinterpret_cast<u16*>(pixel_buf_controller_->back_buffer);
 }
 
@@ -76,6 +81,7 @@ void Display::draw_frame() {
     erase_last_frame_();
     draw_current_frame_();
     swap_buffer_blocking_();
+    // swap_buffer_();
     cur_frame_id++;
 
     // TODO: update this to add triangles + use logging utils + make this #ifdef DEBUG
