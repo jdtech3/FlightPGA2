@@ -9,7 +9,7 @@ where we tried to do the project in Verilog only.
   * `fpga/`: Quartus project for running on FPGA: edited version of "DE1-SoC Computer System"
   * `software/`: C/C++ code for running on Nios II core
   * `bsp/`: board support package for Nios II core
-  * `raspberrypi/`: Python code for running on Raspberry Pi to provide interface to USB joystick
+  * `host/`: Python code and data on the host computer, i.e. to provide interface to USB joystick
 
 ### Patches required
 
