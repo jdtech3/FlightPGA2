@@ -12,8 +12,6 @@ Display::Display(u32 pixel_buf_controller_addr) {
     pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(buf1_);
     swap_buffer_blocking_();
     pixel_buf_controller_->back_buffer = reinterpret_cast<u32>(buf2_);
-    clear(1);
-    clear(2);
 }
 
 // -- Private methods
@@ -30,13 +28,16 @@ void Display::draw_current_frame_() {
 }
 
 void Display::erase_last_frame_() {
-    if (cur_frame_id < 2) return;     // no need to erase anything on first 2 frames
-
-    while (display_objs_.front()->frame_id == cur_frame_id - 2) {
-        display_objs_.front()->color = constants::ERASE_COLOR;
-        display_objs_.front()->draw(current_pixel_buf_);
-        display_objs_.pop_front();
+    if (cur_frame_id < 2) {
+        clear(1);   // not sure why we need to do this
+        clear(2);
     }
+    else
+        while (display_objs_.front()->frame_id == cur_frame_id - 2) {
+            display_objs_.front()->color = constants::ERASE_COLOR;
+            display_objs_.front()->draw(current_pixel_buf_);
+            display_objs_.pop_front();
+        }
 }
 
 void Display::swap_buffer_blocking_() {

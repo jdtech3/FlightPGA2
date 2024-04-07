@@ -50,7 +50,8 @@ class Plane {
         constexpr static float LANDING_VERTICAL_SPEED_MAX = 0.5f;   // m/s
         constexpr static float FLAPS_AOA_INCREASE_COEF = 0.1f;      // deg AOA/deg flaps
         constexpr static float FUEL_BURN_RATE = 0.1f;               // L/sec (real Cessna is 0.0095, but that'll take hours to see fuel effects)
-        constexpr static float ENGINE_POWER_SLEW_RATE = 50.f * ENGINE_POWER_PER_PERCENT;    // N/sec
+        constexpr static float ENGINE_POWER_SLEW_RATE = 10.f * ENGINE_POWER_PER_PERCENT;    // N/sec
+        constexpr static float DRAG_MULTIPLIER = 5.f;
 
         // -- State
 
@@ -108,5 +109,6 @@ class Plane {
         glm::vec3 cur_net_force() const;
 
         // Utility
+        std::string info_str(bool uart = false, bool debug = false) const;
         operator std::string() const;
 };

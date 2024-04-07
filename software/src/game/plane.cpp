@@ -65,7 +65,7 @@ glm::vec3 Plane::cur_net_force() const {
     glm::vec3 weight(0, 0, -cur_mass() * constants::g);
     glm::vec3 thrust = heading_ * engine_power_;
     glm::vec3 lift = up_ * lift_(aoa, heading_dot_vel);
-    glm::vec3 drag = -heading_ * drag_(aoa, heading_dot_vel);
+    glm::vec3 drag = -heading_ * drag_(aoa, heading_dot_vel) * DRAG_MULTIPLIER;
 
     // temp clamp
     if (glm::length2(lift) > glm::length2(weight)) lift = glm::normalize(lift) * glm::length(weight);
@@ -100,8 +100,8 @@ void Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float thro
     fuel_ -= time_passed * FUEL_BURN_RATE;
 
     float req_engine_power = throttle * ENGINE_POWER_PER_PERCENT;
-    if (fabsf(req_engine_power - engine_power_) > ENGINE_POWER_SLEW_RATE)
-        engine_power_ += ENGINE_POWER_SLEW_RATE;
+    if (fabsf(req_engine_power - engine_power_) > (ENGINE_POWER_SLEW_RATE * time_passed))
+        engine_power_ += ENGINE_POWER_SLEW_RATE * time_passed;
     else
         engine_power_ = req_engine_power;
 
@@ -145,12 +145,21 @@ flaps_settings_t Plane::decrease_flaps() {
     return flaps_;
 };
 
-Plane::operator std::string() const {
+std::string Plane::info_str(bool uart, bool debug) const {
     std::ostringstream os;
-    os << "State: " << ((state == LANDED) ? "Landed" : ((state == FLYING) ? "Flying" : "Crashed"));
-    os << " Roll: " << roll_ << "° Pitch: " << pitch_ << "° Yaw: " << yaw_ << "°";
-    os << " Heading vec: " << glm::to_string(heading_) << " Up vec: " << glm::to_string(up_) << " Right vec: " << glm::to_string(right_);
-    os << " Pos: " << glm::to_string(pos_) << " Vel: " << glm::to_string(vel_) << " Accel: " << glm::to_string(accel_);
-    os << " Fuel: " << fuel_ << "L Engine power: " << engine_power_ << "N Flaps: " << flaps_ << "°";
+    os << ((state == LANDED) ? "LANDED" : ((state == FLYING) ? "FLYING" : "CRASHED"));
+    if (uart) os << " Roll: " << roll_ << "° Pitch: " << pitch_ << "° Yaw: " << yaw_ << "°";
+    os << " Speed: " << glm::length(vel_) * constants::M_PER_SEC_TO_KNOTS << " kts";
+    os << " Fuel: " << fuel_ << "L Thrust: " << engine_power_ << "N Flaps: " << flaps_ << (uart ? "°" : "");
+
+    if (debug) {
+        os << "\nHeading vec: " << glm::to_string(heading_) << " Up vec: " << glm::to_string(up_) << " Right vec: " << glm::to_string(right_);
+        os << "\nPos vec: " << glm::to_string(pos_) << " Vel vec: " << glm::to_string(vel_) << " Accel vec: " << glm::to_string(accel_);
+    }
+
     return os.str();
+}
+
+Plane::operator std::string() const {
+    return info_str();
 }
