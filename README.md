@@ -14,7 +14,9 @@ where we tried to do the project in Verilog only.
 ### Patches required
 
   * `glm` needs to be patched using `glm_PR1264_fix_uninitialized_in_constexpr_warning.patch` taken from [unmerged PR](https://github.com/g-truc/glm/pull/1264)
-  * `random.tcc` from `nios2-elf` includes needs to be patched by turning all `std::max(<constant>, ... )` calls into `std::max((double)<constant>, ...)`
+  * `nios2eds/bin/gnu/nios2-elf/include/c++/5.3.0/bits/random.tcc` needs to be patched by turning all `std::max(<constant>, ... )` calls into `std::max((double)<constant>, ...)`
+
+***Note:** targeted for/tested using Quartus Prime 18.1, Python 3.10.2, C99 + C++14 standards, `glm` 1.0.2 commit [`ab913bbdd0bd10462114a17bcb65cf5a368c1f32`](https://github.com/g-truc/glm/tree/ab913bbdd0bd10462114a17bcb65cf5a368c1f32) on Ubuntu 22.04.*
 
 ### Team
 
