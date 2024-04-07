@@ -1,3 +1,4 @@
+
 #include "game/plane.hpp"
 
 // -- Constructor
@@ -42,6 +43,7 @@ void Plane::update_orientation_tensors_() {
 
     heading_ = glm::vec3(rot_matrix_ * glm::vec4(0, 1, 0, 0));
     up_ = glm::vec3(rot_matrix_ * glm::vec4(0, 0, 1, 0));
+    right_ = glm::vec3(rot_matrix_ * glm::vec4(1, 0, 0, 0));
 }
 
 // -- Public
@@ -58,11 +60,19 @@ float Plane::cur_mass() const { return DRY_WEIGHT + fuel_; }
 
 glm::vec3 Plane::cur_net_force() const {
     float heading_dot_vel = glm::dot(heading_, vel_);
+    float aoa = glm::orientedAngle(vel_, heading_, right_);
 
     glm::vec3 weight(0, 0, -cur_mass() * constants::g);
-    glm::vec3 thrust = heading_ * engine_power_ * ENGINE_POWER_PER_PERCENT;
-    glm::vec3 lift = up_ * lift_(cur_aoa(heading_dot_vel), heading_dot_vel);
-    glm::vec3 drag = -heading_ * drag_(cur_aoa(heading_dot_vel), heading_dot_vel);
+    glm::vec3 thrust = heading_ * engine_power_;
+    glm::vec3 lift = up_ * lift_(aoa, heading_dot_vel);
+    glm::vec3 drag = -heading_ * drag_(aoa, heading_dot_vel);
+
+    // temp clamp
+    if (glm::length2(lift) > glm::length2(weight)) lift = glm::normalize(lift) * glm::length(weight);
+
+    // logging::info("Angle of attack", std::to_string(aoa));
+    // logging::info("Lift", glm::to_string(lift));
+    // logging::info("Drag", glm::to_string(drag));
 
     return weight + thrust + lift + drag;
 }
@@ -96,12 +106,22 @@ void Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float thro
         engine_power_ = req_engine_power;
 
     // Update state
-    if (pos_.z < LANDING_GEAR_HEIGHT) {
-        pos_.z = LANDING_GEAR_HEIGHT;
-        state = (vel_.z < -LANDING_VERTICAL_SPEED_MAX) ? CRASHED : LANDED;
+    switch (state) {
+        case LANDED:
+            if (pos_.z > LANDING_GEAR_HEIGHT)
+                state = FLYING;
+            else
+                pos_.z = LANDING_GEAR_HEIGHT;   // clamp
+
+            if (vel_.z < 0) vel_.z = 0;         // clamp
+            break;
+        case FLYING:
+            if (pos_.z <= LANDING_GEAR_HEIGHT) {
+                pos_.z = LANDING_GEAR_HEIGHT;
+                state = (vel_.z < -LANDING_VERTICAL_SPEED_MAX) ? CRASHED : LANDED;
+            }
+            break;
     }
-    else
-        state = FLYING;
 }
 
 void Plane::reset_position() {
@@ -129,7 +149,7 @@ Plane::operator std::string() const {
     std::ostringstream os;
     os << "State: " << ((state == LANDED) ? "Landed" : ((state == FLYING) ? "Flying" : "Crashed"));
     os << " Roll: " << roll_ << "° Pitch: " << pitch_ << "° Yaw: " << yaw_ << "°";
-    os << " Heading vec: " << glm::to_string(heading_) << " Up vec: " << glm::to_string(up_);
+    os << " Heading vec: " << glm::to_string(heading_) << " Up vec: " << glm::to_string(up_) << " Right vec: " << glm::to_string(right_);
     os << " Pos: " << glm::to_string(pos_) << " Vel: " << glm::to_string(vel_) << " Accel: " << glm::to_string(accel_);
     os << " Fuel: " << fuel_ << "L Engine power: " << engine_power_ << "N Flaps: " << flaps_ << "°";
     return os.str();

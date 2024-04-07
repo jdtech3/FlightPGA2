@@ -10,6 +10,7 @@
 #include "glm/trigonometric.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/transform.hpp"
+#include "glm/gtx/vector_angle.hpp"
 #include "glm/gtx/string_cast.hpp"
 
 #include "utils/logging.hpp"
@@ -64,6 +65,7 @@ class Plane {
         glm::mat4 rot_matrix_;
         glm::vec3 heading_;     // unit vec
         glm::vec3 up_;          // unit vec
+        glm::vec3 right_;       // unit vec
 
         // Kinematics
         glm::vec3 pos_;         // <x, y, z> m
