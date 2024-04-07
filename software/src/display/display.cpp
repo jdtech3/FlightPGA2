@@ -22,6 +22,7 @@ void Display::draw_current_frame_() {
     if (display_objs_.empty()) return;
 
     // Current frame objs are at the back, so reverse iterate
+    // ! Note: unintended effect is objects must be inserted in reverse order (background last)
     for (auto iter = display_objs_.rbegin(); iter != display_objs_.rend(); ++iter) {
         if ((*iter)->frame_id != cur_frame_id) break;
         (*iter)->draw(current_pixel_buf_);

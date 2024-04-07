@@ -51,7 +51,6 @@ class Rectangle : public DisplayObject {
         i16 width, height;
 };
 
-
 class Triangle : public DisplayObject{
     public:
         Triangle(i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3, u16 color);
@@ -71,4 +70,15 @@ class Triangle : public DisplayObject{
         static void draw_flat_bottom(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3);
         //! the first two points share the same y-coordinate
         static void draw_flat_top(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3);
+};
+
+class Image : public DisplayObject {
+    public:
+        Image(const u16* image, i16 x, i16 y, i16 width, i16 height);     // x, y coords are top left corner
+        void draw(u16* pixel_buf) const;
+
+    private:
+        const u16* image;
+        i16 x, y;
+        i16 width, height;
 };

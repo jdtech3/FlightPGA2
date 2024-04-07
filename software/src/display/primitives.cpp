@@ -186,7 +186,6 @@ void Triangle::draw_flat_bottom(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x
     int y_max = min(bottom, static_cast<int>(constants::PIXEL_BUF_HEIGHT));
 
     for(int y = y_min; y <= y_max; ++y){
-
         int del_y = y-top;
 
         int left = x1+(del_y*num_left)/den_left;
@@ -198,8 +197,6 @@ void Triangle::draw_flat_bottom(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x
         for(int x = x_min; x <= x_max; ++x)
             Pixel::draw(pixel_buf,x,y,color);
     }
-    
-
 }
 
 void Triangle::draw_flat_top(u16* pixel_buf, u16 color, i16 x1, i16 y1, i16 x2, i16 y2, i16 x3, i16 y3){
@@ -242,6 +239,22 @@ std::ostream& operator<<(std::ostream& os, const Triangle& tri) {
     return os;
 }
 
-
 #undef min
 #undef max
+
+// -- Image
+
+Image::Image(const u16* image, i16 x, i16 y, i16 width, i16 height) :
+    DisplayObject(0xBEEF), image(image), x(x), y(y), width(width), height(height) {}    // random color used as erase canary
+
+void Image::draw(u16* pixel_buf) const {
+    if (color == constants::ERASE_COLOR)
+        Rectangle(x, y, width, height, color).draw(pixel_buf);
+    else {
+        for (int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++) {
+                u16 pix_color = *(image + j*width + i);
+                if (pix_color != 0xFFFF) Pixel::draw(pixel_buf, x+i, y+j, pix_color);   // img converter turns transparent into 0xFFFF
+            }
+    }
+}

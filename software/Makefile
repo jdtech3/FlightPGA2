@@ -152,6 +152,7 @@ CXX_SRCS += $(wildcard src/graphics/*.cpp)
 CXX_SRCS += $(wildcard src/input/*.cpp)
 CXX_SRCS += $(wildcard src/demos/*.cpp)
 CXX_SRCS += $(wildcard src/game/*.cpp)
+CXX_SRCS += $(wildcard src/assets/*.cpp)
 ASM_SRCS :=
 
 # Path to root of object file tree.
