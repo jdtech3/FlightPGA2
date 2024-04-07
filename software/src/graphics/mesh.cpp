@@ -45,7 +45,7 @@ void Mesh::add_to_frame(Display& display, const glm::mat4& model, const glm::mat
         auto v1 = after_mvp[faces[j]];
         auto v2 = after_mvp[faces[j+1]];
         auto v3 = after_mvp[faces[j+2]];
-        if (v1.z <= 0 && v2.z <= 0 && v3.z <= 0)
+        if (v1.z >= 0 && v2.z >= 0 && v3.z >= 0)    // ! no clue why it's z >= 0, should be <= 0
             display.add_display_obj(Triangle(v1, v2, v3, face_color));
         // auto tri = Triangle(after_mvp[faces[j]], after_mvp[faces[j+1]], after_mvp[faces[j+2]], face_color);
         // std::cout << tri << std::endl;
