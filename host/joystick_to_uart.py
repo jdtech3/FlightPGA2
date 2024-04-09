@@ -80,7 +80,7 @@ if __name__ == "__main__":
             # print("Throttle", axis_states["throttle"], "%")
             # print("Pitch", axis_states["pitch"])
             # print("Roll", axis_states["roll"])
-            out = f'{-axis_states["throttle"]} {axis_states["pitch"]} {axis_states["roll"]};'
+            out = f'{axis_states["roll"]} {axis_states["pitch"]} {-axis_states["throttle"]};'
             print(out)
             uart.write(out.encode())
             time_last_output = time.time_ns()
