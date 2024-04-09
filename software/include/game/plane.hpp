@@ -49,7 +49,7 @@ class Plane {
 
         // Following constants are arbitrarily chosen
         constexpr static float LANDING_GEAR_HEIGHT = 0.3f;          // m
-        constexpr static float LANDING_VERTICAL_SPEED_MAX = 0.5f;   // m/s
+        constexpr static float LANDING_VERTICAL_SPEED_MAX = 8.f;   // m/s
         constexpr static float FLAPS_AOA_INCREASE_COEF = 0.1f;      // deg AOA/deg flaps
         constexpr static float FUEL_BURN_RATE = 0.1f;               // L/sec (real Cessna is 0.0095, but that'll take hours to see fuel effects)
         constexpr static float ENGINE_POWER_SLEW_RATE = 10.f * ENGINE_POWER_PER_PERCENT;    // N/sec

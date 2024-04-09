@@ -132,8 +132,10 @@ int Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float throt
             }
             return -1;
         case FLYING:
-            if (pos_.z <= LANDING_GEAR_HEIGHT)
+            if (pos_.z <= LANDING_GEAR_HEIGHT) {
+                logging::info("Landing check vspeed", std::to_string(vel_.z));
                 state = (vel_.z < -LANDING_VERTICAL_SPEED_MAX) ? CRASHED : LANDED;
+            }
             break;
     }
 }
@@ -174,8 +176,9 @@ std::string Plane::info_str(bool uart, bool debug) const {
     os << std::fixed << std::setprecision(0);
     os << ((state == LANDED) ? "LANDED" : ((state == FLYING) ? "FLYING" : "CRASHED"));
     if (uart) os << " Roll: " << roll_ << "° Pitch: " << pitch_ << "° Yaw: " << yaw_ << "°";
-    os << " Speed: " << glm::length(vel_) * constants::M_PER_SEC_TO_KNOTS << " kts";
-    os << " Fuel: " << fuel_ << "L Thrust: " << engine_power_ << "N Flaps: " << flaps_ << (uart ? "°" : "");
+    os << " Speed: " << glm::length(vel_) * constants::M_PER_SEC_TO_KNOTS << " kts Vertical speed: " << vel_.z << " m/s";
+    os << " Fuel: " << fuel_ << "L Thrust: " << engine_power_ << "N";
+    // os << " Fuel: " << fuel_ << "L Thrust: " << engine_power_ << "N Flaps: " << flaps_ << (uart ? "°" : "");
 
     if (debug) {
         os << "\nHeading vec: " << glm::to_string(heading_) << " Up vec: " << glm::to_string(up_) << " Right vec: " << glm::to_string(right_);
