@@ -42,7 +42,7 @@ typedef struct game_options {
 namespace constants {
     const enabled_hardware_t default_enabled_hardware = {
         .joystick = true,
-        .ps2_keyboard = false,
+        .ps2_keyboard = true,
         .ps2_mouse = false,
     };
 
@@ -62,6 +62,7 @@ class Game {
         std::unique_ptr<CharBuf> char_buf_;
         std::unique_ptr<Joystick> joystick_;
         std::unique_ptr<Plane> plane_;
+        std::unique_ptr<Keyboard> keyboard_;
 
         void init_char_buf_();
         void draw_ground(const Camera& camera, const glm::vec3& light_dir);

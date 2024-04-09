@@ -62,9 +62,11 @@ glm::vec3 Plane::cur_net_force() const {
     float heading_dot_vel = glm::dot(heading_, vel_);
     float aoa = glm::orientedAngle(vel_, heading_, right_);
 
-    glm::vec3 weight(0, 0, -cur_mass() * constants::g);
+    // glm::vec3 vel_up = glm::rotate(vel_, glm::radians(90), glm::vec3(1,0,0));
+
+    // glm::vec3 weight(0, 0, -cur_mass() * constants::g);
     glm::vec3 thrust = heading_ * engine_power_;
-    glm::vec3 lift = up_ * lift_(aoa, heading_dot_vel);
+    // glm::vec3 lift = up_ * lift_(aoa, heading_dot_vel);
     // glm::vec3 drag = -heading_ * drag_(aoa, heading_dot_vel) * DRAG_MULTIPLIER;
     glm::vec3 drag = -((vel_ == glm::vec3(0,0,0)) ? glm::vec3(0,0,0) : glm::normalize(vel_)) * drag_(aoa, heading_dot_vel) * 5.f;
 
@@ -72,7 +74,7 @@ glm::vec3 Plane::cur_net_force() const {
 
     // temp clamp
     // if (glm::length2(lift) > glm::length2(weight)) lift = glm::normalize(lift) * glm::length(weight);
-    if (lift.z > -weight.z) lift = fabsf(weight.z / lift.z) * lift;
+    // if (lift.z > -weight.z) lift = fabsf(weight.z / lift.z) * lift;
 
     // logging::info("Angle of attack", std::to_string(aoa));
     // logging::info("Lift", glm::to_string(lift));

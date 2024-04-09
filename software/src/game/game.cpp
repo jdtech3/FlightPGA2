@@ -21,13 +21,10 @@ Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
     audio::init_isr();
     hex_display::init();
 
-    
-    
-
     if (enabled_hardware_.joystick)
         joystick_ = std::make_unique<Joystick>();
     if (enabled_hardware_.ps2_keyboard)
-        ;   // TODO: implement
+        keyboard_ = std::make_unique<Keyboard>(ps2_1);
     if (enabled_hardware_.ps2_mouse)
         init_mouse_isr();
 
@@ -70,29 +67,20 @@ Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
 //     return 0;
 // }
 
-void do_ps2(){
-    // while(true){
-        // u32 data = *reinterpret_cast<u32*>(ps2_1);
-        // u32 rvalid = (data >> 15) & 1;
-        // if(!rvalid) return;
-        // u8 c;
-        // u32 rvalid = ps2_1->read(c);
-        // if(!rvalid) return;
-        // else std::cout << std::hex << static_cast<int>(c) << std::endl;
-    // }
-    ps2_1->clear_fifo();
-}
-
 int Game::run(){
 
     float camera_distance = 150;
     glm::vec3 light_dir = glm::normalize(glm::vec3(1, 0, -1));
 
+    float view_angle = 0;
+
     while(true){
         check_reset();
+        keyboard_->poll();
 
+        if(keyboard_->is_pressed(0x15)) view_angle -= 0.1;
+        if(keyboard_->is_pressed(0x24)) view_angle += 0.1;
 
-        do_ps2();
 
         joystick_->update();
         // keyboard.poll();
@@ -128,9 +116,11 @@ int Game::run(){
         auto plane_heading = plane_->get_heading();
         plane_heading = glm::vec3(plane_heading.x, plane_heading.y, 0);
 
+        glm::vec3 view_arm = glm::rotate(plane_heading, view_angle, glm::vec3(0,0,1));
+
         Camera camera = {
-            plane_->get_pos() - camera_distance*plane_heading + glm::vec3(0,0,camera_distance/5.f),
-            plane_heading,
+            plane_->get_pos() - camera_distance*view_arm + glm::vec3(0,0,camera_distance/5.f),
+            view_arm,
             plane_->get_up()
         };
 
