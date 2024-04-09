@@ -5,11 +5,11 @@
  version="1.0"
  fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2024.03.27.00:16:47 -->
+ <!-- 2024.04.07.21:17:36 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1711513007</value>
+  <value>1712539055</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -1514,7 +1514,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1711513007</value>
+   <value>1712539055</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -22274,7 +22274,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TIMESTAMP</name>
-   <value>1711513007</value>
+   <value>1712539055</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
@@ -22294,7 +22294,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.timestamp</name>
-   <value>1711513007</value>
+   <value>1712539055</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.vendor</name>
@@ -22310,7 +22310,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="timestamp">
    <type>int</type>
-   <value>1711513007</value>
+   <value>1712539055</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -23526,7 +23526,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1711513007</value>
+   <value>1712539055</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -25772,7 +25772,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1711513007</value>
+   <value>1712539055</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -33171,7 +33171,7 @@ parameters are a RESULT of the module parameters. -->
  <module
    name="VGA_Subsystem_VGA_Controller"
    kind="altera_up_avalon_video_vga_controller"
-   version="18.1"
+   version="18.0"
    path="VGA_Subsystem.VGA_Controller">
   <!-- Describes a single module. Module parameters are
 the requested settings for a module instance. -->
@@ -38030,7 +38030,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1711513007</value>
+   <value>1712539055</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -42797,7 +42797,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1711513007</value>
+   <value>1712539055</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -56212,8 +56212,8 @@ parameters are a RESULT of the module parameters. -->
   <name>altera_up_avalon_video_vga_controller</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IModule</subtype>
-  <displayName>VGA Controller Intel FPGA IP</displayName>
-  <version>18.1</version>
+  <displayName>VGA Controller</displayName>
+  <version>18.0</version>
  </plugin>
  <plugin>
   <instanceCount>2</instanceCount>
