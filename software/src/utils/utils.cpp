@@ -22,6 +22,24 @@ int randint(int low, int high) {
     return (std::rand() % (high - low)) + low;
 }
 
+// RESET key
+static void reset() {
+    logging::warn("FlightGPA2", "resetting!");
+    u32 start = get_clock_ms();
+    while ((get_clock_ms() - start) < 1000);
+
+    NIOS2_WRITE_STATUS(0);
+    NIOS2_WRITE_IENABLE(0);
+    ((void (*) (void)) NIOS2_RESET_ADDR) ();
+}
+void check_reset() {
+    volatile u8* key_ptr = reinterpret_cast<volatile u8*>(KEY_BASE + 0xC);
+    u8 keys = *key_ptr;
+    *key_ptr = keys;
+    
+    if (keys & 1) reset();
+}
+
 // FPS
 float get_fps(Display& display) {
     static u32 prev_time;

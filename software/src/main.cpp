@@ -1,5 +1,6 @@
 #include "demos/demos.hpp"
 #include "game/game.hpp"
+#include "utils/utils.hpp"
 #include "constants.hpp"
 
 // #define DEMO
@@ -14,4 +15,6 @@ int main() {
         Game game(options);
         game.run();
     #endif
+
+    while (true) check_reset();
 }

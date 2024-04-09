@@ -55,8 +55,8 @@ namespace constants {
 
 class Game {
     private:
-        enabled_hardware_t enabled_hardware_;
         game_options_t game_options_;
+        enabled_hardware_t enabled_hardware_;
 
         std::unique_ptr<Display> display_;
         std::unique_ptr<CharBuf> char_buf_;

@@ -5,6 +5,8 @@
 #include "input/keyboard.hpp"
 #include "input/PS2.hpp"
 
+#include <stdexcept>
+
 Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
     game_options_(game_options),
     enabled_hardware_(enabled_hardware)
@@ -18,8 +20,6 @@ Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
     init_timer_isr();
     audio::init_isr();
     hex_display::init();
-
-    std::cout << std::hex << (void*)ps2_1 << std::endl;
 
     
     
@@ -89,6 +89,7 @@ int Game::run(){
     glm::vec3 light_dir = glm::normalize(glm::vec3(1, 0, -1));
 
     while(true){
+        check_reset();
 
 
         do_ps2();
@@ -172,6 +173,15 @@ int Game::run(){
         if (display_->cur_frame_id % 10 == 0) {
             char_buf_->eraseln(char_buf_->CHAR_BUF_HEIGHT - 1);
             char_buf_->println(plane_->info_str(), char_buf_->CHAR_BUF_HEIGHT - 1);
+            
+            char_buf_->println("^", 6, 39);
+            char_buf_->eraseln(8);
+            std::ostringstream os;
+            int principal_yaw = static_cast<int>(std::round(plane_->get_yaw())) % 360;
+            int heading = std::round(principal_yaw > 0 ? 360 - principal_yaw : -principal_yaw);
+            os << "-  " << std::setw(3) << std::setfill('0') << static_cast<int>(heading) << std::setfill(' ') << "  -";
+            char_buf_->println(os.str(), 8, 35);
+
             hex_display::display_uint(static_cast<u32>(plane_->get_pos().z));
         }
     }
