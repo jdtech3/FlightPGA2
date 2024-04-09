@@ -84,7 +84,7 @@ glm::vec3 Plane::cur_net_force() const {
 }
 
 // State update
-void Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float throttle) {
+int Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float throttle) {
     // Update time
     float current_time = get_clock_s();
     float time_passed = current_time - last_update_s_;
@@ -128,6 +128,7 @@ void Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float thro
                 pos_.z = LANDING_GEAR_HEIGHT;
                 vel_.z = 0.f;
             }
+            return -1;
         case FLYING:
             if (pos_.z <= LANDING_GEAR_HEIGHT)
                 state = (vel_.z < -LANDING_VERTICAL_SPEED_MAX) ? CRASHED : LANDED;

@@ -11,9 +11,11 @@
 #include "game/plane.hpp"
 #include "input/uart_joystick.hpp"
 #include "input/mouse.hpp"
+#include "input/keyboard.hpp"
 #include "utils/audio.hpp"
 #include "utils/char_buf.hpp"
 #include "utils/clock.hpp"
+#include "utils/hex_display.hpp" 
 #include "utils/logging.hpp"
 #include "utils/utils.hpp"
 

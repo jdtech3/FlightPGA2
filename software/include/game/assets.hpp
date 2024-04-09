@@ -14,4 +14,6 @@ namespace assets {
 
     extern const int engine_sound[90646];
     extern const u32 engine_sound_length;
+    extern const int seatbelt_sound[19644];
+    extern const u32 seatbelt_sound_length;
 }

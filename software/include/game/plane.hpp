@@ -97,7 +97,7 @@ class Plane {
         plane_state_t state;
 
         // State update
-        void update(float roll_rate, float pitch_rate, float yaw_rate, float throttle); // rates in deg/s, throttle in %
+        int update(float roll_rate, float pitch_rate, float yaw_rate, float throttle); // rates in deg/s, throttle in %
         void reset_position();
         flaps_settings_t increase_flaps();
         flaps_settings_t decrease_flaps();

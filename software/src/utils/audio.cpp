@@ -2,19 +2,20 @@
 
 // -- Globals
 
-static volatile audio_reg_t* audio_reg_ptr_ = reinterpret_cast<audio_reg_t*>(AUDIO_SUBSYSTEM_AUDIO_BASE);
-static audio_state_t audio_state_ = {
+static volatile audio::audio_reg_t* audio_reg_ptr_ = reinterpret_cast<audio::audio_reg_t*>(AUDIO_SUBSYSTEM_AUDIO_BASE);
+static audio::audio_state_t audio_state_ = {
     .data_array = nullptr,
     .data_array_length = 0,
     .looping = true,
     .volume = 1.f
 };
 static u32 cur_idx_ = 0;
+static bool done_ = false;
 
 // -- ISR
 
 static void audio_isr_(void* context, alt_u32 id) {
-    audio_state_t state = *reinterpret_cast<audio_state_t*>(context);
+    audio::audio_state_t state = *reinterpret_cast<audio::audio_state_t*>(context);
     
     while (audio_reg_ptr_->wslc > 0) {
         audio_reg_ptr_->left_data = static_cast<int>(state.data_array[cur_idx_] * state.volume);
@@ -24,6 +25,7 @@ static void audio_isr_(void* context, alt_u32 id) {
             logging::info("Audio ISR", std::string("finished playing, looping: ") + (state.looping ? "yes" : "no"));
             if (!state.looping) {
                 audio_reg_ptr_->control = 0;    // disable interrupts
+                done_ = true;
                 break;
             }
             else cur_idx_ = 0;
@@ -59,6 +61,8 @@ namespace audio {
     }
 
     void play(const int* audio_data, u32 audio_data_length, bool loop) {
+        logging::info("Audio", std::string("playing new") + (loop ? " looping" : "") + " sound");
+        
         audio_reg_ptr_->control = 0b1100;   // disable interrupt and clear FIFOs
 
         audio_state_.data_array = audio_data;
@@ -66,10 +70,18 @@ namespace audio {
         audio_state_.looping = loop;
         audio_state_.volume = 1.f;
         cur_idx_ = 0;
+        done_ = false;
 
         audio_reg_ptr_->control = 0b0010;   // re-enable interrupt
     }
 
+    void stop() {
+        logging::info("Audio", "stopping playback");
+        audio_reg_ptr_->control = 0b1100;
+        audio_reg_ptr_->control = 0;
+    }
+
     void set_volume(float volume) { audio_state_.volume = volume; }
+    bool done() { return done_; }
 
 }

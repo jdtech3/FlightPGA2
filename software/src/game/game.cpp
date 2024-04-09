@@ -2,6 +2,9 @@
 
 #include "game/game.hpp"
 
+#include "input/keyboard.hpp"
+#include "input/PS2.hpp"
+
 Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
     game_options_(game_options),
     enabled_hardware_(enabled_hardware)
@@ -13,7 +16,13 @@ Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
 
     init_random();
     init_timer_isr();
+    int err = init_ps2();
+    if(err) std::cout << "cannot init ps2, error " << err << std::endl;
     audio::init_isr();
+    hex_display::init();
+
+    // ps2_1->write(0xFF);
+    
 
     if (enabled_hardware_.joystick)
         joystick_ = std::make_unique<Joystick>();
@@ -66,20 +75,19 @@ int Game::run(){
     float camera_distance = 150;
     glm::vec3 light_dir = glm::normalize(glm::vec3(1, 0, -1));
 
-    audio::play(assets::engine_sound, assets::engine_sound_length, true);
-
     while(true){
-        // angle += 0.05;
         joystick_->update();
+        // keyboard.poll();
+        // if(keyboard.is_pressed(0x1C)) std::cout << "A pressed!" << std::endl;
         // std::cout << "R: " << joystick.roll << " P: " << joystick.pitch << " T%: " << joystick.throttle << std::endl;
-        plane_->update(joystick_->roll*10.f, joystick_->pitch*10.f, -plane_->get_roll()*0.1f, joystick_->throttle*50.f+50.f);
+        int status = plane_->update(joystick_->roll*10.f, joystick_->pitch*10.f, -plane_->get_roll()*0.1f, joystick_->throttle*50.f+50.f);
+        if (status == -1) {
+            char_buf_->println("YOU CRASHED! :(", 30, 35);
+            audio::stop();
+            break;
+        }
+        
         audio::set_volume(plane_->get_engine_power_percent());
-        // if (plane.get_speed() < 60.f)
-        //     plane.update(0,0,0,100);
-        // else if (plane.get_pitch() < 10.f)
-        //     plane.update(0,1,0,100);
-        // else
-        //     plane.update(0,0,0,100);
 
         display_->add_display_obj(Image(reinterpret_cast<const u16*>(assets::airspeed_indicator), 0, 0, 70, 70));
 
@@ -104,6 +112,14 @@ int Game::run(){
         draw_trees(camera, light_dir);
         draw_ground(camera, light_dir);
 
+        if (display_->cur_frame_id == 2) {
+            // We're launching, play some sounds
+            audio::play(assets::seatbelt_sound, assets::seatbelt_sound_length, false);
+            while (!audio::done());     // block until done
+            
+            audio::play(assets::engine_sound, assets::engine_sound_length);
+        }
+
         display_->draw_frame();
 
         if (display_->cur_frame_id % 60 == 0) {  // only update once a second
@@ -114,6 +130,7 @@ int Game::run(){
         if (display_->cur_frame_id % 10 == 0) {
             char_buf_->eraseln(char_buf_->CHAR_BUF_HEIGHT - 1);
             char_buf_->println(plane_->info_str(), char_buf_->CHAR_BUF_HEIGHT - 1);
+            hex_display::display_uint(static_cast<u32>(plane_->get_pos().z));
         }
     }
 
