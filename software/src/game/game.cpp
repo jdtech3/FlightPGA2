@@ -16,12 +16,12 @@ Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
 
     init_random();
     init_timer_isr();
-    int err = init_ps2();
-    if(err) std::cout << "cannot init ps2, error " << err << std::endl;
     audio::init_isr();
     hex_display::init();
 
-    // ps2_1->write(0xFF);
+    std::cout << std::hex << (void*)ps2_1 << std::endl;
+
+    
     
 
     if (enabled_hardware_.joystick)
@@ -70,12 +70,29 @@ Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
 //     return 0;
 // }
 
+void do_ps2(){
+    // while(true){
+        // u32 data = *reinterpret_cast<u32*>(ps2_1);
+        // u32 rvalid = (data >> 15) & 1;
+        // if(!rvalid) return;
+        // u8 c;
+        // u32 rvalid = ps2_1->read(c);
+        // if(!rvalid) return;
+        // else std::cout << std::hex << static_cast<int>(c) << std::endl;
+    // }
+    ps2_1->clear_fifo();
+}
+
 int Game::run(){
 
     float camera_distance = 150;
     glm::vec3 light_dir = glm::normalize(glm::vec3(1, 0, -1));
 
     while(true){
+
+
+        do_ps2();
+
         joystick_->update();
         // keyboard.poll();
         // if(keyboard.is_pressed(0x1C)) std::cout << "A pressed!" << std::endl;
@@ -89,7 +106,23 @@ int Game::run(){
         
         audio::set_volume(plane_->get_engine_power_percent());
 
-        display_->add_display_obj(Image(reinterpret_cast<const u16*>(assets::airspeed_indicator), 0, 0, 70, 70));
+        // Airspeed indicator overlay
+        float airspeed_angle = ((plane_->get_speed() * constants::M_PER_SEC_TO_KNOTS) / 200.f) * 340.f;     // 200 kts at 340 deg ish
+        glm::mat4 airspd_arrow_transform = glm::translate(glm::vec3(constants::PIXEL_BUF_WIDTH-70/2, 70/2, 0)) 
+                                         * glm::rotate(glm::radians(airspeed_angle), glm::vec3(0, 0, 1));
+
+        glm::vec3 airspd_arrow_v1 = airspd_arrow_transform * glm::vec4(-2, 0, 0, 1);
+        glm::vec3 airspd_arrow_v2 = airspd_arrow_transform * glm::vec4(2, 0, 0, 1);
+        glm::vec3 airspd_arrow_v3 = airspd_arrow_transform * glm::vec4(0, -20, 0, 1);
+        display_->add_display_obj(
+            Triangle(
+                airspd_arrow_v1.x, airspd_arrow_v1.y,
+                airspd_arrow_v2.x, airspd_arrow_v2.y,
+                airspd_arrow_v3.x, airspd_arrow_v3.y,
+                0xFFFF
+            )
+        );
+        display_->add_display_obj(Image(reinterpret_cast<const u16*>(assets::airspeed_indicator), constants::PIXEL_BUF_WIDTH-71, 0, 70, 70));
 
         auto plane_heading = plane_->get_heading();
         plane_heading = glm::vec3(plane_heading.x, plane_heading.y, 0);
@@ -124,7 +157,16 @@ int Game::run(){
 
         if (display_->cur_frame_id % 60 == 0) {  // only update once a second
             logging::info("Plane", plane_->info_str(true, true));
-            logging::info("Stats", "FPS: " + std::to_string(get_fps(*display_)) + " | Frame: " + std::to_string(display_->cur_frame_id));
+            
+            if (game_options_.show_fps) {
+                std::ostringstream os;
+                os << "FlightGPA2 | FPS: " << get_fps(*display_) << " | Frame: " << display_->cur_frame_id;
+
+                std::string str = os.str();
+                char_buf_->eraseln();
+                char_buf_->println(str);
+                logging::info("Perf", str);
+            }
         }
 
         if (display_->cur_frame_id % 10 == 0) {

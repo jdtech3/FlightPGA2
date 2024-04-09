@@ -1,6 +1,6 @@
 #include "input/uart_joystick.hpp"
 
-Joystick::Joystick() : roll(0.0f), pitch(0.0f), throttle(0.0f) {
+Joystick::Joystick() : roll(0.f), pitch(0.f), throttle(-1.f) {
     uart::clear_fifo();
     logging::ok("UART joystick init", "done");
 }
