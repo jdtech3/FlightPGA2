@@ -13,6 +13,7 @@ Game::Game(game_options_t game_options, enabled_hardware_t enabled_hardware) :
 
     init_random();
     init_timer_isr();
+    audio::init_isr();
 
     if (enabled_hardware_.joystick)
         joystick_ = std::make_unique<Joystick>();
@@ -65,11 +66,14 @@ int Game::run(){
     float camera_distance = 150;
     glm::vec3 light_dir = glm::normalize(glm::vec3(1, 0, -1));
 
+    audio::play(assets::engine_sound, assets::engine_sound_length, true);
+
     while(true){
         // angle += 0.05;
         joystick_->update();
         // std::cout << "R: " << joystick.roll << " P: " << joystick.pitch << " T%: " << joystick.throttle << std::endl;
         plane_->update(joystick_->roll*10.f, joystick_->pitch*10.f, -plane_->get_roll()*0.1f, joystick_->throttle*50.f+50.f);
+        audio::set_volume(plane_->get_engine_power_percent());
         // if (plane.get_speed() < 60.f)
         //     plane.update(0,0,0,100);
         // else if (plane.get_pitch() < 10.f)

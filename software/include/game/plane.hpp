@@ -44,7 +44,8 @@ class Plane {
         constexpr static float STALL_SPEED = 25.47f;        // m/s (91.7 km/h)
         constexpr static float STALL_SPEED_FLAPS = 22.81f;  // m/s (82.1 km/h)
         constexpr static float MAX_SPEED = 77.78f;          // m/s (280 km/h)
-        constexpr static float ENGINE_POWER_PER_PERCENT = 250.f * constants::g / 100.f;     // kg m/s^2 = N
+        constexpr static float MAX_ENGINE_POWER = 250.f * constants::g;                 // kg m/s^2 = N
+        constexpr static float ENGINE_POWER_PER_PERCENT = MAX_ENGINE_POWER / 100.f;     // kg m/s^2 = N
 
         // Following constants are arbitrarily chosen
         constexpr static float LANDING_GEAR_HEIGHT = 0.3f;          // m
@@ -76,7 +77,7 @@ class Plane {
 
         // System
         float fuel_;                // L
-        float engine_power_;        // %
+        float engine_power_;        // N
         flaps_settings_t flaps_;
 
         // -- Helper functions
@@ -117,6 +118,7 @@ class Plane {
         float get_roll() const;
         float get_pitch() const;
         float get_yaw() const;
+        float get_engine_power_percent() const;
         std::string info_str(bool uart = false, bool debug = false) const;
         operator std::string() const;
 };

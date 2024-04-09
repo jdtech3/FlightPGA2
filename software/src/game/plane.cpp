@@ -164,6 +164,8 @@ float Plane::get_roll() const { return roll_; }
 float Plane::get_pitch() const { return pitch_; }
 float Plane::get_yaw() const { return yaw_; }
 
+float Plane::get_engine_power_percent() const { return engine_power_ / MAX_ENGINE_POWER; };
+
 std::string Plane::info_str(bool uart, bool debug) const {
     std::ostringstream os;
     os << std::fixed << std::setprecision(0);
