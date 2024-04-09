@@ -1,10 +1,10 @@
 #include "graphics/camera.hpp"
 
-glm::mat4 camera(float Translate, glm::vec2 const& Rotate) {
-	glm::mat4 Projection = glm::perspective(glm::pi<float>() * 0.25f, 4.0f / 3.0f, 0.1f, 100.f);
-	glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -Translate));
-	View = glm::rotate(View, Rotate.y, glm::vec3(-1.0f, 0.0f, 0.0f));
-	View = glm::rotate(View, Rotate.x, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 Model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-	return Projection * View * Model;
+Camera::Camera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up): pos(pos), dir(dir), up(up){
+	update_mat_vp();
+}
+
+void Camera::update_mat_vp(){
+	mat_vp = glm::perspective(glm::radians(70.f), 320.f/240.f, 0.001f, 1000.f)
+           * glm::lookAt(pos, pos+dir, up);
 }

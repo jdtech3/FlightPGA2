@@ -19,6 +19,18 @@ namespace constants {
 
     // Settings
     const u16 ERASE_COLOR           = 0x0000;
-    constexpr float AMBIENT_LIGHT   = 0.3f;
+    constexpr float AMBIENT_LIGHT   = 0.5f;
+
+    // World
+    constexpr float GND_SIZE_SIDE = 1000.f;
+    constexpr float GND_SIZE_FORWARD = 10.f;
+    constexpr float TREE_SPACING = 600.f;
+    constexpr float TREE_RENDER_DIST = 1500.f;
+    constexpr float TREE_BUSH_SIDE = 12.f;
+    constexpr float TREE_BUSH_HEIGHT = 50.f;
+    constexpr u16 TREE_BUSH_COLOR = 0x16A1;
+    constexpr float TREE_TRUNK_SIDE = 0.5f;
+    constexpr float TREE_TRUNK_HEIGHT = 3.f;
+    constexpr u16 TREE_TRUNK_COLOR = 0x8220;
     // note: some constants also defined in game/game.hpp
 };

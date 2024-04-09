@@ -2,7 +2,7 @@
 #include "game/game.hpp"
 #include "constants.hpp"
 
-#define DEMO;
+// #define DEMO
 
 int main() {
     #ifdef DEMO

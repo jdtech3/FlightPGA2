@@ -6,6 +6,8 @@
 #include "cstdint_short.hpp"
 #include "display/display.hpp"
 #include "display/primitives.hpp"
+#include "graphics/camera.hpp"
+#include "game/assets.hpp"
 #include "game/plane.hpp"
 #include "input/uart_joystick.hpp"
 #include "input/mouse.hpp"
@@ -13,6 +15,13 @@
 #include "utils/clock.hpp"
 #include "utils/logging.hpp"
 #include "utils/utils.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/intersect.hpp>
 
 
 typedef struct enabled_hardware {
@@ -52,6 +61,8 @@ class Game {
         std::unique_ptr<Plane> plane_;
 
         void init_char_buf_();
+        void draw_ground(const Camera& camera, const glm::vec3& light_dir);
+        void draw_trees(const Camera& camera, const glm::vec3& light_dir);
 
     public:
         Game(

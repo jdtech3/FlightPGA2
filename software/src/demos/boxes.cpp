@@ -73,8 +73,8 @@ int boxes() {
         Joystick joystick;
     #endif
 
-    glm::mat4 cam = camera(static_cast<float>(randint(0, 1000)) / 100.0f, glm::vec2(0.0f));
-    logging::info("GLM cam matrix test", glm::to_string(cam));
+    // glm::mat4 cam = camera(static_cast<float>(randint(0, 1000)) / 100.0f, glm::vec2(0.0f));
+    // logging::info("GLM cam matrix test", glm::to_string(cam));
 
     std::shared_ptr<Box> boxes[NUM_BOXES];
     for (int i = 0; i < NUM_BOXES; i++)

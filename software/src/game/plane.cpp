@@ -5,8 +5,8 @@
 
 Plane::Plane() :
     last_update_s_(get_clock_s()),
-    roll_(0), pitch_(0), yaw_(0),
-    pos_(glm::vec3(0, 0, LANDING_GEAR_HEIGHT)), vel_(glm::vec3(0)), accel_(glm::vec3(0)),
+    roll_(0), pitch_(0), yaw_(glm::radians(0.f)),
+    pos_(glm::vec3(constants::TREE_SPACING/2, 0, LANDING_GEAR_HEIGHT)), vel_(0), accel_(0),
     fuel_(MAX_FUEL), engine_power_(0), flaps_(FLAPS_NONE),
     state(LANDED)
 {
@@ -65,16 +65,22 @@ glm::vec3 Plane::cur_net_force() const {
     glm::vec3 weight(0, 0, -cur_mass() * constants::g);
     glm::vec3 thrust = heading_ * engine_power_;
     glm::vec3 lift = up_ * lift_(aoa, heading_dot_vel);
-    glm::vec3 drag = -heading_ * drag_(aoa, heading_dot_vel) * DRAG_MULTIPLIER;
+    // glm::vec3 drag = -heading_ * drag_(aoa, heading_dot_vel) * DRAG_MULTIPLIER;
+    glm::vec3 drag = -((vel_ == glm::vec3(0,0,0)) ? glm::vec3(0,0,0) : glm::normalize(vel_)) * drag_(aoa, heading_dot_vel) * 5.f;
+
+    // glm::vec3 drag_vert = up_ * drag_(0, glm::dot(up_, vel_)) * 100.f;
 
     // temp clamp
-    if (glm::length2(lift) > glm::length2(weight)) lift = glm::normalize(lift) * glm::length(weight);
+    // if (glm::length2(lift) > glm::length2(weight)) lift = glm::normalize(lift) * glm::length(weight);
+    if (lift.z > -weight.z) lift = fabsf(weight.z / lift.z) * lift;
 
     // logging::info("Angle of attack", std::to_string(aoa));
     // logging::info("Lift", glm::to_string(lift));
     // logging::info("Drag", glm::to_string(drag));
 
-    return weight + thrust + lift + drag;
+    return thrust + drag;
+    // return weight + thrust + lift + drag;
+    // return weight + thrust + lift + drag + drag_vert;
 }
 
 // State update
@@ -100,8 +106,10 @@ void Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float thro
     fuel_ -= time_passed * FUEL_BURN_RATE;
 
     float req_engine_power = throttle * ENGINE_POWER_PER_PERCENT;
-    if (fabsf(req_engine_power - engine_power_) > (ENGINE_POWER_SLEW_RATE * time_passed))
+    if ((req_engine_power - engine_power_) > (ENGINE_POWER_SLEW_RATE * time_passed))
         engine_power_ += ENGINE_POWER_SLEW_RATE * time_passed;
+    else if ((engine_power_ - req_engine_power) > (ENGINE_POWER_SLEW_RATE * time_passed))
+        engine_power_ -= ENGINE_POWER_SLEW_RATE * time_passed;
     else
         engine_power_ = req_engine_power;
 
@@ -115,11 +123,14 @@ void Plane::update(float roll_rate, float pitch_rate, float yaw_rate, float thro
 
             if (vel_.z < 0) vel_.z = 0;         // clamp
             break;
-        case FLYING:
+        case CRASHED:
             if (pos_.z <= LANDING_GEAR_HEIGHT) {
                 pos_.z = LANDING_GEAR_HEIGHT;
-                state = (vel_.z < -LANDING_VERTICAL_SPEED_MAX) ? CRASHED : LANDED;
+                vel_.z = 0.f;
             }
+        case FLYING:
+            if (pos_.z <= LANDING_GEAR_HEIGHT)
+                state = (vel_.z < -LANDING_VERTICAL_SPEED_MAX) ? CRASHED : LANDED;
             break;
     }
 }
@@ -145,8 +156,17 @@ flaps_settings_t Plane::decrease_flaps() {
     return flaps_;
 };
 
+glm::vec3 Plane::get_pos() const { return pos_; }
+glm::vec3 Plane::get_heading() const { return heading_; }
+glm::vec3 Plane::get_up() const { return up_; }
+float Plane::get_speed() const { return glm::length(vel_); }
+float Plane::get_roll() const { return roll_; }
+float Plane::get_pitch() const { return pitch_; }
+float Plane::get_yaw() const { return yaw_; }
+
 std::string Plane::info_str(bool uart, bool debug) const {
     std::ostringstream os;
+    os << std::fixed << std::setprecision(0);
     os << ((state == LANDED) ? "LANDED" : ((state == FLYING) ? "FLYING" : "CRASHED"));
     if (uart) os << " Roll: " << roll_ << "° Pitch: " << pitch_ << "° Yaw: " << yaw_ << "°";
     os << " Speed: " << glm::length(vel_) * constants::M_PER_SEC_TO_KNOTS << " kts";

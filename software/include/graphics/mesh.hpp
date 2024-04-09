@@ -7,6 +7,8 @@
 #include "cstdint_short.hpp"
 #include "constants.hpp"
 #include "display/display.hpp"
+#include "graphics/camera.hpp"
+#include "graphics/shapes.hpp"
 
 class Mesh{
     public:
@@ -16,7 +18,7 @@ class Mesh{
             std::vector<u16>&& faces,
             std::vector<glm::vec3>&& face_normals,
             std::vector<u16>&& face_colors);
-        void add_to_frame(Display& display, const glm::mat4& model, const glm::mat4& vp, const glm::vec3& camera_dir, const glm::vec3& camera_pos, const glm::vec3& light_dir) const;
+        void add_to_frame(Display& display, const glm::mat4& model, const Camera& camera, const glm::vec3& light_dir) const;
     // private:
         glm::vec3 center;
         std::vector<glm::vec3> vertices;

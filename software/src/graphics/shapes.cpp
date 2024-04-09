@@ -14,8 +14,8 @@ float Triangle3D::depth() const {
     return v1.z + v2.z + v3.z;
 }
 
-bool Triangle3D::sort_depth_(const std::unique_ptr<Triangle3D>& a, const std::unique_ptr<Triangle3D>& b){
-    return a->depth() < b->depth();
+bool Triangle3D::sort_depth_(const Triangle3D& a, const Triangle3D& b){
+    return a.depth() < b.depth();
 }
        
 Quad3D::Quad3D(glm::vec4 v1, glm::vec4 v2, glm::vec4 v3, glm::vec4 v4, u16 color):

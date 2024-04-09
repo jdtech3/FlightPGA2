@@ -1,7 +1,20 @@
 #pragma once
 
-#include "glm/glm.hpp"
-#include "glm/ext.hpp"
+#include "glm/vec3.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
 
 
-glm::mat4 camera(float Translate, glm::vec2 const& Rotate);
+class Camera{
+    public:
+        glm::vec3 pos;
+        glm::vec3 dir;
+        glm::vec3 up;
+        glm::mat4 mat_vp;
+
+        Camera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up);
+
+        void update_mat_vp();
+
+};

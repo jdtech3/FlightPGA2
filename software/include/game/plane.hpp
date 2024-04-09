@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/vec3.hpp"
@@ -109,6 +110,13 @@ class Plane {
         glm::vec3 cur_net_force() const;
 
         // Utility
+        glm::vec3 get_pos() const;
+        glm::vec3 get_heading() const;
+        glm::vec3 get_up() const;
+        float get_speed() const;
+        float get_roll() const;
+        float get_pitch() const;
+        float get_yaw() const;
         std::string info_str(bool uart = false, bool debug = false) const;
         operator std::string() const;
 };

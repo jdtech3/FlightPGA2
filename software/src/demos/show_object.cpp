@@ -77,6 +77,7 @@
 #include "display/primitives.hpp"
 #include "graphics/shapes.hpp"
 #include "graphics/mesh.hpp"
+#include "graphics/camera.hpp"
 #include "utils/utils.hpp"
 #include "utils/clock.hpp"
 #include "utils/logging.hpp"
@@ -99,8 +100,14 @@ int show_object(){
 
     int camera_distance = 15;
 
-    auto mat_vp = glm::perspective(glm::radians(70.f), 320.f/240.f, 0.001f, 1000.f)
-                * glm::lookAt(glm::vec3(0,0,camera_distance), glm::vec3(0,0,camera_distance-1), glm::vec3(0,1,0));
+    Camera camera = {
+        glm::vec3(0,0,camera_distance),
+        glm::vec3(0,0,-1),
+        glm::vec3(0,1,0)
+    };
+
+    // auto mat_vp = glm::perspective(glm::radians(70.f), 320.f/240.f, 0.001f, 1000.f)
+    //             * glm::lookAt(glm::vec3(0,0,camera_distance), glm::vec3(0,0,camera_distance-1), glm::vec3(0,1,0));
 
     init_timer_isr();
     init_random();
@@ -117,7 +124,7 @@ int show_object(){
                        * glm::rotate(glm::radians(spin),glm::vec3(1,1,1))
                        * glm::translate(-show_object_mesh.center);
 
-        show_object_mesh.add_to_frame(display, mat_model, mat_vp, glm::vec3(0, 0, -1), glm::vec3(0, 0, camera_distance), glm::vec3(0, -1, 0));
+        show_object_mesh.add_to_frame(display, mat_model, camera, glm::vec3(0, -1, 0));
 
         display.draw_frame();
 

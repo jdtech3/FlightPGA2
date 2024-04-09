@@ -87,8 +87,14 @@ int cube(){
         }
     );
 
-    auto mat_vp = glm::perspective(glm::radians(70.f), 320.f/240.f, 0.001f, 1000.f)
-                * glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,4), glm::vec3(0,1,0));
+    Camera camera = {
+        {0,0,5},
+        {0,0,-1},
+        {0,1,0}
+    };
+
+    // auto mat_vp = glm::perspective(glm::radians(70.f), 320.f/240.f, 0.001f, 1000.f)
+    //             * glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,4), glm::vec3(0,1,0));
 
     init_timer_isr();
     init_random();
@@ -103,7 +109,7 @@ int cube(){
         auto mat_model = glm::rotate(glm::radians(angle),glm::vec3(0,1,0))
                        * glm::rotate(glm::radians(spin),glm::vec3(1,1,1));
 
-        cube_mesh.add_to_frame(display, mat_model, mat_vp, glm::vec3(0, 0, -1), glm::vec3(0, 0, 5), glm::vec3(0, -1, 0));
+        cube_mesh.add_to_frame(display, mat_model, camera, glm::vec3(0, -1, 0));
 
         display.draw_frame();
 
