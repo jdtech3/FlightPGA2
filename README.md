@@ -11,11 +11,11 @@ where we tried to do the project in Verilog only.
 Big thanks to [glm](https://github.com/g-truc/glm) (OpenGL Mathematics library) licensed under the MIT license, without which this project would not be possible.
 
 Targeted for/tested using:
-  * Quartus Prime 18.1,
+  * Quartus Prime 18.1
   * Python 3.10.2
   * C99 + C++14 standards
   * `glm` 1.0.2 commit [`ab913bbdd0bd10462114a17bcb65cf5a368c1f32`](https://github.com/g-truc/glm/tree/ab913bbdd0bd10462114a17bcb65cf5a368c1f32)
-  * Ubuntu 22.04.*
+  * Ubuntu 22.04
 
 ### File organization
 
