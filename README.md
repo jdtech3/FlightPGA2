@@ -1,4 +1,4 @@
-# FlightGPA2
+# FlightPGA2
 Implementing a flight simulator (term used loosely...) in FPGA on the DE1-SoC: this time with help of Nios II! 
 
 This is a continuation/rewrite of the first version of the project: [FlightGPA](https://github.com/jdtech3/FlightGPA),
